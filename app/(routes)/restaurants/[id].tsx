@@ -1,13 +1,14 @@
 import React, { FC, memo, useEffect, useMemo } from 'react';
 import { IRestaurant, useRestaurant } from '@/widgets/restaurants';
-import { Image, StyleSheet, View } from 'react-native';
+import { FlatList, Image, StyleSheet, View } from 'react-native';
 import {
+  Colors,
   ContainerPadding,
   SCREEN_HEIGHT,
   SCREEN_WIDTH,
   supabaseBucketImg,
 } from '@/global';
-import { BackButton, Flex, Gap, SearchButton, Text } from '@/components';
+import { BackButton, Gap, SearchButton, Text } from '@/components';
 import { useLocalSearchParams } from 'expo-router';
 import {
   SafeAreaView,
@@ -17,7 +18,6 @@ import RestaurantActionList from '@/widgets/restaurants/components/RestaurantAct
 import { RestOfferCard, useRestOffers } from '@/widgets/restaurant-offer';
 import Animated, {
   interpolate,
-  interpolateColor,
   useAnimatedScrollHandler,
   useAnimatedStyle,
   useSharedValue,
@@ -38,6 +38,14 @@ const Restaurant: FC = () => {
 
     return restaurants.find((r) => `${r.id}` === `${id}`);
   }, [restaurants, id]);
+
+  const restOffersGenres = useMemo(() => {
+    const result: any = {};
+    restOffers.forEach((offer) => {
+      result[offer.genre] = offer.genre;
+    });
+    return Object.keys(result);
+  }, [restOffers]);
 
   const scrollHandler = useAnimatedScrollHandler((event) => {
     scrollValue.value = event.contentOffset.y;
@@ -110,14 +118,28 @@ const Restaurant: FC = () => {
                 {item?.name}
               </Animated.Text>
               <RestaurantActionList item={item} />
-              <View style={styles.offers}>
-                {[...restOffers, ...restOffers].map((restOffer, inx) => (
-                  <RestOfferCard
-                    restId={item?.public_id}
-                    key={restOffer.id + inx}
-                    restOffer={restOffer}
-                  />
-                ))}
+              <View style={styles.offersContainer}>
+                <Gap />
+                <FlatList
+                  data={restOffersGenres}
+                  renderItem={({ item: genre }) => (
+                    <Text style={styles.genre}>{genre}</Text>
+                  )}
+                  horizontal
+                  showsHorizontalScrollIndicator={false}
+                  ItemSeparatorComponent={() => <Gap x={20} />}
+                />
+                <Gap />
+                <Gap />
+                <View style={styles.offers}>
+                  {[...restOffers, ...restOffers].map((restOffer, inx) => (
+                    <RestOfferCard
+                      restId={item?.public_id}
+                      key={restOffer.id + inx}
+                      restOffer={restOffer}
+                    />
+                  ))}
+                </View>
               </View>
             </View>
           </Animated.ScrollView>
@@ -162,10 +184,19 @@ const styles = StyleSheet.create({
   otherContent: {
     marginTop: imgHeight / 2.1,
   },
-  offers: {
+  offersContainer: {
     marginTop: -4,
     backgroundColor: '#fff',
     padding: ContainerPadding,
+  },
+  genre: {
+    position: 'sticky',
+    backgroundColor: Colors.light.cardBg,
+    paddingVertical: 8,
+    paddingHorizontal: 24,
+    borderRadius: 12,
+  },
+  offers: {
     flexDirection: 'row',
     flexWrap: 'wrap',
     gap: 12,

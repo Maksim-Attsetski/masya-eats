@@ -1,7 +1,7 @@
 import React, { FC, memo } from 'react';
 import { IRestaurantOffer } from '../types';
 import { Image, StyleSheet, TouchableOpacity, View } from 'react-native';
-import { Button, Text } from '@/components';
+import { Text } from '@/components';
 import {
   Colors,
   ContainerPadding,
@@ -14,7 +14,7 @@ interface IProps {
   restId: string; // name of the restaurant
 }
 
-const padding = 20;
+const padding = 12;
 const imhWidth = SCREEN_WIDTH / 2 - ContainerPadding * 2 - padding;
 
 const RestOfferCard: FC<IProps> = ({ restOffer, restId }) => {
