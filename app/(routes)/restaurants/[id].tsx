@@ -9,7 +9,7 @@ import {
   supabaseBucketImg,
 } from '@/global';
 import { BackButton, Gap, SearchButton, Text } from '@/components';
-import { useLocalSearchParams } from 'expo-router';
+import { router, useLocalSearchParams } from 'expo-router';
 import {
   SafeAreaView,
   useSafeAreaInsets,
@@ -95,7 +95,14 @@ const Restaurant: FC = () => {
               <Animated.Text style={[styles.name, firstNameStyles]}>
                 {item?.name}
               </Animated.Text>
-              <SearchButton />
+              <SearchButton
+                onPress={() =>
+                  router.push({
+                    pathname: '/(routes)/restaurants/search-offers',
+                    params: { rest_name: item.public_id },
+                  })
+                }
+              />
             </View>
           </View>
           <Animated.ScrollView

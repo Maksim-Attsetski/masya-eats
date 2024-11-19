@@ -1,16 +1,17 @@
 import React, { FC, memo } from 'react';
 
 import MaterialCommunityIcons from '@expo/vector-icons/MaterialCommunityIcons';
-import { TouchableOpacity } from 'react-native';
-import { router } from 'expo-router';
+import { GestureResponderEvent, TouchableOpacity } from 'react-native';
 
-const SearchButton: FC = () => {
+interface IProps {
+  onPress: (e: GestureResponderEvent) => void;
+}
+
+const SearchButton: FC<IProps> = ({ onPress }) => {
   return (
     <TouchableOpacity
       style={{ backgroundColor: '#fff', padding: 8, borderRadius: 24 }}
-      onPress={() =>
-        router?.canGoBack() ? router.back() : router.push('/(routes)/index')
-      }
+      onPress={onPress}
     >
       <MaterialCommunityIcons name='magnify' size={24} color='black' />
     </TouchableOpacity>
