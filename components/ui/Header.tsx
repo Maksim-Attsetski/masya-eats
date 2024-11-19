@@ -1,12 +1,15 @@
-import { Flex, PlusBtn, Text } from '@/components';
-import { SCREEN_WIDTH } from '@gorhom/bottom-sheet';
 import React, { FC, memo } from 'react';
-import { StyleSheet, View } from 'react-native';
+
+import { StyleSheet } from 'react-native';
+
+import { ProfileBtn } from '@/widgets';
+import { Flex, PlusBtn, Text } from '@/components';
+import { SCREEN_WIDTH } from '@/global';
 
 const Header: FC = () => {
   return (
     <Flex justify='space-between' style={styles.container}>
-      <View style={styles.user} />
+      <ProfileBtn />
       <Text>Header</Text>
       <PlusBtn />
     </Flex>
@@ -17,12 +20,6 @@ const styles = StyleSheet.create({
   container: {
     maxWidth: SCREEN_WIDTH,
     paddingVertical: 8,
-  },
-  user: {
-    backgroundColor: 'grey',
-    height: 40,
-    width: 40,
-    borderRadius: '100%',
   },
 });
 
