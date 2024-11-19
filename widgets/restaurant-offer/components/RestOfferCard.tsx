@@ -1,6 +1,7 @@
-import React, { FC, memo } from 'react';
-import { IRestaurantOffer } from '../types';
+import React, { Dispatch, FC, memo, SetStateAction } from 'react';
 import { Image, StyleSheet, TouchableOpacity, View } from 'react-native';
+
+import { IRestaurantOffer } from '../types';
 import { Text } from '@/components';
 import {
   Colors,
@@ -12,37 +13,51 @@ import {
 interface IProps {
   restOffer: IRestaurantOffer;
   restId: string; // name of the restaurant
+  setActiveOffer: Dispatch<SetStateAction<IRestaurantOffer | null>>;
 }
 
 const padding = 12;
 const imhWidth = SCREEN_WIDTH / 2 - ContainerPadding * 2 - padding;
 
-const RestOfferCard: FC<IProps> = ({ restOffer, restId }) => {
+const RestOfferCard: FC<IProps> = ({ restOffer, restId, setActiveOffer }) => {
   return (
-    <View style={styles.container}>
-      <Image
-        source={{
-          uri: `${supabaseBucketImg}restaurants-offers/${restId}/${restOffer.public_id}.${restOffer.preview}`,
+    <>
+      <TouchableOpacity
+        onPress={() => {
+          setActiveOffer(restOffer);
         }}
-        height={imhWidth}
-        width={imhWidth}
-        style={styles.image}
-      />
-      <View style={styles.content}>
-        <Text style={styles.price} title>
-          {restOffer.price} Br
-        </Text>
-        <Text style={styles.name}>{restOffer.name}</Text>
-        <Text style={styles.subText}>
-          {restOffer.weight} {' • ' + (restOffer?.kbju?.kcal ?? '~') + ' ккал'}
-        </Text>
-      </View>
-      <View style={{ marginTop: 'auto' }}>
-        <TouchableOpacity style={styles.button}>
-          <Text style={styles.buttonText}>+ Добавить</Text>
-        </TouchableOpacity>
-      </View>
-    </View>
+        style={styles.container}
+      >
+        <Image
+          source={{
+            uri: `${supabaseBucketImg}restaurants-offers/${restId}/${restOffer.public_id}.${restOffer.preview}`,
+          }}
+          height={imhWidth}
+          width={imhWidth}
+          style={styles.image}
+        />
+        <View style={styles.content}>
+          <Text style={styles.price} title>
+            {restOffer.price} Br
+          </Text>
+          <Text style={styles.name}>{restOffer.name}</Text>
+          <Text style={styles.subText}>
+            {restOffer.weight}{' '}
+            {' • ' + (restOffer?.kbju?.kcal ?? '~') + ' ккал'}
+          </Text>
+        </View>
+        <View style={{ marginTop: 'auto' }}>
+          <TouchableOpacity
+            onPress={() => {
+              console.log('child');
+            }}
+            style={styles.button}
+          >
+            <Text style={styles.buttonText}>+ Добавить</Text>
+          </TouchableOpacity>
+        </View>
+      </TouchableOpacity>
+    </>
   );
 };
 

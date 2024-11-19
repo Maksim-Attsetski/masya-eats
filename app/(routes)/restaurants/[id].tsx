@@ -1,4 +1,4 @@
-import React, { FC, memo, useEffect, useMemo } from 'react';
+import React, { FC, memo, useEffect, useMemo, useRef, useState } from 'react';
 import { IRestaurant, useRestaurant } from '@/widgets/restaurants';
 import { FlatList, Image, StyleSheet, View } from 'react-native';
 import {
@@ -8,30 +8,44 @@ import {
   SCREEN_WIDTH,
   supabaseBucketImg,
 } from '@/global';
-import { BackButton, Gap, SearchButton, Text } from '@/components';
+import {
+  BackButton,
+  Button,
+  Flex,
+  Gap,
+  SearchButton,
+  Text,
+} from '@/components';
 import { router, useLocalSearchParams } from 'expo-router';
 import {
   SafeAreaView,
   useSafeAreaInsets,
 } from 'react-native-safe-area-context';
 import RestaurantActionList from '@/widgets/restaurants/components/RestaurantActionList';
-import { RestOfferCard, useRestOffers } from '@/widgets/restaurant-offer';
+import {
+  IRestaurantOffer,
+  RestOfferCard,
+  useRestOffers,
+} from '@/widgets/restaurant-offer';
 import Animated, {
   interpolate,
   useAnimatedScrollHandler,
   useAnimatedStyle,
   useSharedValue,
 } from 'react-native-reanimated';
+import BottomSheet, { BottomSheetView } from '@gorhom/bottom-sheet';
 
 const imgHeight = SCREEN_HEIGHT * 0.4;
 
 const Restaurant: FC = () => {
   const insets = useSafeAreaInsets();
-
+  const bottomSheetRef = useRef<BottomSheet>(null);
   const id = useLocalSearchParams()?.id;
   const { restaurants } = useRestaurant();
   const { onGetRestOffers, restOffers } = useRestOffers();
+
   const scrollValue = useSharedValue(0);
+  const [activeOffer, setActiveOffer] = useState<IRestaurantOffer | null>(null);
 
   const item: IRestaurant | undefined = useMemo(() => {
     if (restaurants.length === 0) return undefined;
@@ -83,6 +97,14 @@ const Restaurant: FC = () => {
   useEffect(() => {
     item?.id && onGetRestOffers(item?.id);
   }, [item?.id]);
+
+  useEffect(() => {
+    if (activeOffer) {
+      bottomSheetRef.current?.snapToIndex(0);
+    } else {
+      bottomSheetRef.current?.close();
+    }
+  }, [activeOffer]);
 
   return (
     <SafeAreaView>
@@ -141,6 +163,7 @@ const Restaurant: FC = () => {
                 <View style={styles.offers}>
                   {[...restOffers, ...restOffers].map((restOffer, inx) => (
                     <RestOfferCard
+                      setActiveOffer={setActiveOffer}
                       restId={item?.public_id}
                       key={restOffer.id + inx}
                       restOffer={restOffer}
@@ -154,6 +177,68 @@ const Restaurant: FC = () => {
       ) : (
         <Text>Empty</Text>
       )}
+      <BottomSheet
+        index={-1}
+        onChange={(inx) => inx === -1 && setActiveOffer(null)}
+        ref={bottomSheetRef}
+        enableDynamicSizing
+        enablePanDownToClose
+      >
+        <BottomSheetView style={{ paddingHorizontal: ContainerPadding }}>
+          <Flex justify='center'>
+            <Image
+              source={{
+                uri: `${supabaseBucketImg}restaurants-offers/${item?.public_id}/${activeOffer?.public_id}.${activeOffer?.preview}`,
+              }}
+              height={SCREEN_WIDTH / 2}
+              width={SCREEN_WIDTH / 2 - ContainerPadding}
+            />
+          </Flex>
+          <Gap y={20} />
+          <Text>{activeOffer?.description}</Text>
+          <Gap y={20} />
+          {activeOffer?.kbju?.kcal && (
+            <View>
+              <Text>На 100 гр</Text>
+              <Gap />
+              <Flex gap={16}>
+                <View>
+                  <Text>{activeOffer?.kbju?.kcal}</Text>
+                  <Text>ккал</Text>
+                </View>
+                <View>
+                  <Text>{activeOffer?.kbju?.protein}</Text>
+                  <Text>белков</Text>
+                </View>
+                <View>
+                  <Text>{activeOffer?.kbju?.fat}</Text>
+                  <Text>жира</Text>
+                </View>
+                <View>
+                  <Text>{activeOffer?.kbju?.carbohydraties}</Text>
+                  <Text>углеводов</Text>
+                </View>
+              </Flex>
+            </View>
+          )}
+          <Gap />
+          <Text title>
+            {activeOffer?.name} <Text>{activeOffer?.weight}</Text>
+          </Text>
+          <Gap y={20} />
+          <Flex>
+            <Flex>
+              <Button>-</Button>
+              <Text>1</Text>
+              <Button>+</Button>
+            </Flex>
+            <Button full type='primary'>
+              Добавить
+            </Button>
+          </Flex>
+          <Gap y={20} />
+        </BottomSheetView>
+      </BottomSheet>
     </SafeAreaView>
   );
 };
