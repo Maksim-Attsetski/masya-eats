@@ -1,4 +1,4 @@
-import React, { FC, memo, useMemo } from 'react';
+import React, { FC, memo, useEffect, useMemo } from 'react';
 import {
   IRestaurant,
   RestaurantAction,
@@ -7,6 +7,7 @@ import {
 import {
   FlatList,
   Image,
+  ScrollView,
   StyleSheet,
   TouchableOpacity,
   View,
@@ -23,6 +24,7 @@ import AntDesign from '@expo/vector-icons/AntDesign';
 import { router, useLocalSearchParams } from 'expo-router';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import RestaurantActionList from '@/widgets/restaurants/components/RestaurantActionList';
+import { RestOfferCard, useRestOffers } from '@/widgets/restaurant-offer';
 
 const imgHeight = SCREEN_HEIGHT * 0.4;
 const otherContentTop = imgHeight / 2;
@@ -30,12 +32,17 @@ const otherContentTop = imgHeight / 2;
 const Restaurant: FC = () => {
   const id = useLocalSearchParams()?.id;
   const { restaurants } = useRestaurant();
+  const { onGetRestOffers, restOffers } = useRestOffers();
 
   const item: IRestaurant | undefined = useMemo(() => {
     if (restaurants.length === 0) return undefined;
 
     return restaurants.find((r) => `${r.id}` === `${id}`);
   }, [restaurants, id]);
+
+  useEffect(() => {
+    item?.id && onGetRestOffers(item?.id);
+  }, [item?.id]);
 
   return (
     <SafeAreaView>
@@ -45,7 +52,7 @@ const Restaurant: FC = () => {
             source={{
               uri:
                 supabaseBucketImg +
-                `restaurants/${item?.name}.${item?.preview}`,
+                `restaurants/${item?.public_id}.${item?.preview}`,
             }}
             style={styles.img}
             height={imgHeight}
@@ -53,28 +60,25 @@ const Restaurant: FC = () => {
           />
           <Gap />
           <View style={styles.otherContent}>
-            <Text
-              style={{
-                fontSize: 32,
-                color: '#fff',
-                fontWeight: '900',
-              }}
-            >
-              {item?.name}
-            </Text>
+            <Text style={styles.name}>{item?.name}</Text>
             <RestaurantActionList item={item} />
+            <FlatList
+              data={[...restOffers, ...restOffers]}
+              numColumns={2}
+              columnWrapperStyle={{
+                justifyContent: 'space-between',
+                gap: 12,
+              }}
+              contentContainerStyle={styles.offers}
+              scrollEnabled
+              renderItem={({ item: restOffer }) => (
+                <RestOfferCard restId={item?.public_id} restOffer={restOffer} />
+              )}
+              keyExtractor={(item, inx) => item.id + inx}
+              ListEmptyComponent={<Text>Пусто</Text>}
+              ItemSeparatorComponent={() => <Gap />}
+            />
           </View>
-
-          <FlatList
-            horizontal
-            data={Array.from({ length: 40 }).map((_, inx) => inx)}
-            renderItem={({ index }) => (
-              <View>
-                <Text>{index}</Text>
-              </View>
-            )}
-            ItemSeparatorComponent={() => <View style={{ width: 8 }} />}
-          />
         </View>
       ) : (
         <Text>Empty</Text>
@@ -88,10 +92,19 @@ const styles = StyleSheet.create({
     position: 'absolute',
     inset: 0,
   },
+  name: {
+    fontSize: 32,
+    color: '#fff',
+    fontWeight: '900',
+    paddingHorizontal: ContainerPadding,
+  },
   otherContent: {
-    position: 'absolute',
-    top: otherContentTop,
-    left: ContainerPadding,
+    marginTop: imgHeight / 2.2,
+  },
+  offers: {
+    marginTop: 10,
+    backgroundColor: '#fff',
+    padding: ContainerPadding * 2,
   },
   news: {
     fontSize: 10,

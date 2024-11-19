@@ -65,6 +65,7 @@ const RestaurantActionList: FC<IProps> = ({ item }) => {
     <FlatList
       horizontal
       scrollEnabled
+      showsHorizontalScrollIndicator={false}
       data={dataForActions}
       style={{ paddingTop: 12, paddingLeft: 12 }}
       renderItem={({ item }) => <RestaurantAction {...item} />}
