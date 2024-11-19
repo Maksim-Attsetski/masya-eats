@@ -27,7 +27,6 @@ import RestaurantActionList from '@/widgets/restaurants/components/RestaurantAct
 import { RestOfferCard, useRestOffers } from '@/widgets/restaurant-offer';
 
 const imgHeight = SCREEN_HEIGHT * 0.4;
-const otherContentTop = imgHeight / 2;
 
 const Restaurant: FC = () => {
   const id = useLocalSearchParams()?.id;
@@ -99,7 +98,7 @@ const styles = StyleSheet.create({
     paddingHorizontal: ContainerPadding,
   },
   otherContent: {
-    marginTop: imgHeight / 2.2,
+    marginTop: imgHeight / 2.1,
   },
   offers: {
     marginTop: 10,

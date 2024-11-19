@@ -1,7 +1,7 @@
 import React, { FC, memo } from 'react';
 import { IRestaurantOffer } from '../types';
-import { Image, StyleSheet, View } from 'react-native';
-import { Text } from '@/components';
+import { Image, StyleSheet, TouchableOpacity, View } from 'react-native';
+import { Button, Text } from '@/components';
 import {
   Colors,
   ContainerPadding,
@@ -14,7 +14,7 @@ interface IProps {
   restId: string; // name of the restaurant
 }
 
-const padding = 30;
+const padding = 20;
 const imhWidth = SCREEN_WIDTH / 2 - ContainerPadding * 2 - padding;
 
 const RestOfferCard: FC<IProps> = ({ restOffer, restId }) => {
@@ -37,6 +37,11 @@ const RestOfferCard: FC<IProps> = ({ restOffer, restId }) => {
           {restOffer.weight} {' • ' + (restOffer?.kbju?.kcal ?? '~') + ' ккал'}
         </Text>
       </View>
+      <View style={{ marginTop: 'auto' }}>
+        <TouchableOpacity style={styles.button}>
+          <Text style={styles.buttonText}>+ Добавить</Text>
+        </TouchableOpacity>
+      </View>
     </View>
   );
 };
@@ -44,8 +49,8 @@ const RestOfferCard: FC<IProps> = ({ restOffer, restId }) => {
 const styles = StyleSheet.create({
   container: {
     backgroundColor: Colors.light.cardBg,
-    paddingHorizontal: 8,
-    paddingVertical: 12,
+    paddingHorizontal: 6,
+    paddingVertical: 6,
     borderRadius: 12,
     maxWidth: imhWidth + padding,
   },
@@ -66,6 +71,19 @@ const styles = StyleSheet.create({
   subText: {
     color: 'grey',
     fontSize: 16,
+  },
+  button: {
+    backgroundColor: '#fff',
+    marginTop: 12,
+    paddingVertical: 8,
+    paddingHorizontal: 12,
+    justifyContent: 'center',
+    alignItems: 'center',
+    borderRadius: 24,
+  },
+  buttonText: {
+    fontWeight: 'bold',
+    fontSize: 14,
   },
 });
 

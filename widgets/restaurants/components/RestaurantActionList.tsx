@@ -67,7 +67,7 @@ const RestaurantActionList: FC<IProps> = ({ item }) => {
       scrollEnabled
       showsHorizontalScrollIndicator={false}
       data={dataForActions}
-      style={{ paddingTop: 12, paddingLeft: 12 }}
+      style={{ padding: 12 }}
       renderItem={({ item }) => <RestaurantAction {...item} />}
       ItemSeparatorComponent={() => <View style={{ width: 8 }} />}
     />
