@@ -1,106 +1,38 @@
-import { Flex, Header, PlusModal, Text } from '@/components';
-import React, { FC, memo } from 'react';
-import { ScrollView, View } from 'react-native';
+import { Gap, Header, Layout, Text } from '@/components';
+import { RestaurantItem, useRestaurant } from '@/widgets/restaurants';
+import React, { FC, memo, useEffect } from 'react';
+import { FlatList } from 'react-native';
 
-const Home: FC = () => {
+const HomeScreen: FC = () => {
+  const { onGetRestaurants, restaurants, restaurantsLoading } = useRestaurant();
+
+  useEffect(() => {
+    onGetRestaurants();
+  }, []);
+
   return (
-    <View>
+    <Layout>
       <Header />
-      <ScrollView style={{ height: '100%' }}>
-        <Text>Home </Text>
-        <Text>Home </Text>
-        <Text>Home </Text>
-        <Text>Home </Text>
-        <Text>Home </Text>
-        <Text>Home </Text>
-        <Text>Home </Text>
-        <Text>Home </Text>
-        <Text>Home </Text>
-        <Text>Home </Text>
-        <Text>Home </Text>
-        <Text>Home </Text>
-        <Text>Home </Text>
-        <Text>Home </Text>
-        <Text>Home </Text>
-        <Text>Home </Text>
-        <Text>Home </Text>
-        <Text>Home </Text>
-        <Text>Home </Text>
-        <Text>Home </Text>
-        <Text>Home </Text>
-        <Text>Home </Text>
-        <Text>Home </Text>
-        <Text>Home </Text>
-        <Text>Home </Text>
-        <Text>Home </Text>
-        <Text>Home </Text>
-        <Text>Home </Text>
-        <Text>Home </Text>
-        <Text>Home </Text>
-        <Text>Home </Text>
-        <Text>Home </Text>
-        <Text>Home </Text>
-        <Text>Home </Text>
-        <Text>Home </Text>
-        <Text>Home </Text>
-        <Text>Home </Text>
-        <Text>Home </Text>
-        <Text>Home </Text>
-        <Text>Home </Text>
-        <Text>Home </Text>
-        <Text>Home </Text>
-        <Text>Home </Text>
-        <Text>Home </Text>
-        <Text>Home </Text>
-        <Text>Home </Text>
-        <Text>Home </Text>
-        <Text>Home </Text>
-        <Text>Home </Text>
-        <Text>Home </Text>
-        <Text>Home </Text>
-        <Text>Home </Text>
-        <Text>Home </Text>
-        <Text>Home </Text>
-        <Text>Home </Text>
-        <Text>Home </Text>
-        <Text>Home </Text>
-        <Text>Home </Text>
-        <Text>Home </Text>
-        <Text>Home </Text>
-        <Text>Home </Text>
-        <Text>Home </Text>
-        <Text>Home </Text>
-        <Text>Home </Text>
-        <Text>Home </Text>
-        <Text>Home </Text>
-        <Text>Home </Text>
-        <Text>Home </Text>
-        <Text>Home </Text>
-        <Text>Home </Text>
-        <Text>Home </Text>
-        <Text>Home </Text>
-        <Text>Home </Text>
-        <Text>Home </Text>
-        <Text>Home </Text>
-        <Text>Home </Text>
-        <Text>Home </Text>
-        <Text>Home </Text>
-        <Text>Home </Text>
-        <Text>Home </Text>
-        <Text>Home </Text>
-        <Text>Home </Text>
-        <Text>Home </Text>
-        <Text>Home </Text>
-        <Text>Home </Text>
-        <Text>Home </Text>
-        <Text>Home </Text>
-        <Text>Home </Text>
-        <Text>Home </Text>
-        <Text>Home </Text>
-        <Text>Home </Text>
-      </ScrollView>
-    </View>
+      <FlatList
+        ListHeaderComponent={
+          <>
+            <Text title>Рестораны</Text>
+            <Gap />
+            <Text>Мы думаем они худшие. Сделайте заказ и проверьте</Text>
+            <Gap />
+          </>
+        }
+        data={restaurants}
+        renderItem={({ item }) => <RestaurantItem item={item} />}
+        refreshing={restaurantsLoading}
+        ListEmptyComponent={
+          <>
+            <Text>Пусто</Text>
+          </>
+        }
+      />
+    </Layout>
   );
 };
 
-export default memo(Home);
+export default memo(HomeScreen);

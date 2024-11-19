@@ -13,7 +13,7 @@ export default function RootLayout() {
   return (
     <ThemeProvider>
       <AuthProvider>
-        <GestureHandlerRootView style={{ flex: 1, paddingHorizontal: 12 }}>
+        <GestureHandlerRootView style={{ flex: 1 }}>
           <Stack initialRouteName='(routes)'>
             <Stack.Screen
               name='(routes)'

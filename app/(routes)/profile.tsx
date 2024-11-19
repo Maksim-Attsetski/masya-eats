@@ -2,7 +2,7 @@ import React from 'react';
 
 import { StyleSheet, View } from 'react-native';
 
-import { Button, Flex, Gap, Layout, Text } from '@/components';
+import { Button, Flex, Gap, Layout, MiniHeader, Text } from '@/components';
 import { useAuth } from '@/widgets';
 import { useTheme } from '@/hooks';
 
@@ -12,6 +12,7 @@ export default function ProfileScreen() {
 
   return (
     <Layout>
+      <MiniHeader title={user?.user_metadata?.name} />
       <Text style={styles.themeTitle}>Тема</Text>
       <Gap y={20} />
 

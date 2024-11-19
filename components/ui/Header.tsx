@@ -4,7 +4,7 @@ import { StyleSheet } from 'react-native';
 
 import { ProfileBtn } from '@/widgets';
 import { Flex, PlusBtn, Text } from '@/components';
-import { SCREEN_WIDTH } from '@/global';
+import { ContainerPadding, SCREEN_WIDTH } from '@/global';
 
 const Header: FC = () => {
   return (
@@ -18,7 +18,7 @@ const Header: FC = () => {
 
 const styles = StyleSheet.create({
   container: {
-    maxWidth: SCREEN_WIDTH,
+    maxWidth: SCREEN_WIDTH - ContainerPadding * 4,
     paddingVertical: 8,
   },
 });

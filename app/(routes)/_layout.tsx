@@ -11,10 +11,10 @@ const RoutesLayout = () => {
         headerShown: false,
       }}
       initialRouteName='index'
-      screenLayout={(props) => <Layout children={props.children} />}
     >
       <Stack.Screen name='index' />
       <Stack.Screen name='profile' />
+      <Stack.Screen name='restaurants/[id]' />
     </Stack>
   );
 };

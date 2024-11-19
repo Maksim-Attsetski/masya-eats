@@ -15,11 +15,15 @@ const MiniHeader: FC<IProps> = ({ title }) => {
     <>
       <Gap />
       <Flex justify='space-between'>
-        <TouchableOpacity onPress={() => router?.canGoBack() && router.back()}>
+        <TouchableOpacity
+          onPress={() =>
+            router?.canGoBack() ? router.back() : router.push('/(routes)/index')
+          }
+        >
           <Ionicons name='arrow-back' size={24} color='black' />
         </TouchableOpacity>
         <Text title>{title}</Text>
-        <Gap />
+        <Gap y={30} />
       </Flex>
     </>
   );

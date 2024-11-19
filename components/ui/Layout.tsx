@@ -5,7 +5,7 @@ import { SafeAreaView } from 'react-native-safe-area-context';
 
 import { useThemeColor } from '@/hooks';
 import { PlusModal } from '../subscription';
-import { ContainerPadding } from '@/constants';
+import { ContainerPadding, SCREEN_WIDTH } from '@/global';
 
 const Layout: FC<PropsWithChildren> = ({ children }) => {
   const bgColor = useThemeColor('background');
@@ -21,6 +21,7 @@ const styles = StyleSheet.create({
   container: {
     paddingHorizontal: ContainerPadding,
     flex: 1,
+    width: SCREEN_WIDTH,
   },
 });
 

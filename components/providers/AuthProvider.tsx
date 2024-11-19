@@ -1,14 +1,13 @@
 import React, { FC, memo, PropsWithChildren, useEffect, useState } from 'react';
 
-import { router } from 'expo-router';
+import { useAsyncStorage } from '@react-native-async-storage/async-storage';
 import { ActivityIndicator, View } from 'react-native';
 
 import { supabase } from '@/global';
 import { useAuth } from '@/widgets';
-import { useAsyncStorage } from '@react-native-async-storage/async-storage';
 
 const AuthProvider: FC<PropsWithChildren> = ({ children }) => {
-  const { setUser, user } = useAuth();
+  const { setUser } = useAuth();
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
