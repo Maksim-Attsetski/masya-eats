@@ -1,3 +1,4 @@
+import ChooseAuthTypeModal from './ChooseAuthTypeModal';
 import ProfileBtn from './ProfileBtn';
 
-export { ProfileBtn };
+export { ProfileBtn, ChooseAuthTypeModal };

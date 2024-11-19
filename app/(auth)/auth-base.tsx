@@ -1,23 +1,26 @@
-import React, { memo } from 'react';
+import React, { memo, useRef } from 'react';
 
-import { StyleSheet } from 'react-native';
-
-import { Button, Flex, Gap, Text } from '@/components';
+import { Button, Gap, MiniHeader, Text } from '@/components';
+import { ChooseAuthTypeModal } from '@/widgets';
+import BottomSheet from '@gorhom/bottom-sheet';
 
 const AuthBase = () => {
+  const ref = useRef<BottomSheet>(null);
   return (
     <>
-      <Gap y={50} />
-      <Text title>Добро пожаловать!</Text>
+      <MiniHeader title='Профиль' />
       <Gap y={24} />
-      <Flex toDown>
-        <Button full type='primary' to={'/(auth)/sign-up'}>
-          Регистрация
-        </Button>
-        <Button full type='secondary' to={'/(auth)/login'}>
-          Войти
-        </Button>
-      </Flex>
+      <Text title>Авторизуйтесь</Text>
+      <Gap y={4} />
+      <Text>Чтобы заказывать еду, продукты, вещи для дома и многое другое</Text>
+      <Gap />
+      <Button
+        type='primary'
+        btnProps={{ onPress: () => ref.current?.snapToIndex(0) }}
+      >
+        Войти
+      </Button>
+      <ChooseAuthTypeModal bottomSheetRef={ref} />
     </>
   );
 };

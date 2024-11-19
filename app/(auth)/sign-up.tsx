@@ -1,40 +1,22 @@
-import React, { memo, useMemo, useState } from 'react';
+import React, { memo, useState } from 'react';
 
-import { Button, Gap, Input, Text } from '@/components';
-import { useAuth } from '@/widgets';
+import { router } from 'expo-router';
+
+import { Button, Flex, Gap, Input, MiniHeader } from '@/components';
 
 const SignUp = () => {
-  const { onSignup } = useAuth();
-
   const [name, setName] = useState<string>('');
-  const [email, setEmail] = useState<string>('');
-  const [pass, setPass] = useState<string>('');
 
-  const isFormValid = useMemo(() => {
-    return (
-      // other errors checking in supabase
-      (name.length > 0 && name.length <= 50) ||
-      (email.length > 0 && email.length <= 50) ||
-      (pass.length > 6 && pass.length <= 20)
-    );
-  }, [name, email, pass]);
-
-  const onSubmit = async () => {
-    if (isFormValid) {
-      await onSignup({
-        email,
-        password: pass,
-        options: { data: { name } },
-      });
-    }
+  const onContinue = async () => {
+    router.push({
+      pathname: '/(auth)/sign-up-detail',
+      params: { name },
+    });
   };
 
   return (
     <>
-      <Button to={'../'}>Назад</Button>
-
-      <Gap y={20} />
-      <Text title>Создай свой аккаунт</Text>
+      <MiniHeader title='Введите ваше имя' />
       <Gap y={12} />
 
       <Input
@@ -42,37 +24,16 @@ const SignUp = () => {
         inputProps={{
           onChangeText: setName,
           value: name,
+          maxLength: 20,
         }}
       />
-      <Input
-        title='E-mail'
-        inputProps={{
-          keyboardType: 'email-address',
-          onChangeText: setEmail,
-          value: email,
-        }}
-      />
-      <Input
-        title='Пароль'
-        inputProps={{
-          keyboardType: 'visible-password',
-          onChangeText: setPass,
-          value: pass,
-        }}
-      />
-
       <Gap y={12} />
 
-      <Button
-        type='primary'
-        btnProps={{
-          onPress: onSubmit,
-          disabled: !isFormValid,
-          style: { marginTop: 'auto' },
-        }}
-      >
-        Продолжить
-      </Button>
+      <Flex toDown>
+        <Button full type='primary' btnProps={{ onPress: onContinue }}>
+          Продолжить
+        </Button>
+      </Flex>
       <Gap />
     </>
   );
