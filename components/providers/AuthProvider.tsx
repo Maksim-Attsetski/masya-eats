@@ -28,10 +28,6 @@ const AuthProvider: FC<PropsWithChildren> = ({ children }) => {
     })();
   }, []);
 
-  useEffect(() => {
-    router.replace(user?.id ? '/' : '/(auth)/auth-base');
-  }, [user]);
-
   return (
     <>
       {loading && (

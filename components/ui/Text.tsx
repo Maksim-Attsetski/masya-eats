@@ -16,7 +16,8 @@ const MyText: FC<IProps> = (props) => {
       style={[
         {
           color: textColor,
-          fontSize: props.title ? 32 : 20,
+          fontSize: props.title ? 20 : 16,
+          fontWeight: props?.title ? 'bold' : '400',
           textAlign: props.center ? 'center' : 'left',
         },
         props.style,

@@ -6,21 +6,13 @@ export const Colors = {
     text: '#1D1D1F',
     secondaryText: '#9E9E9E',
     background: '#fff',
-    cardBg: '#F5F5F7',
-    tint: tintColorLight,
-    icon: '#687076',
-    tabIconDefault: '#687076',
-    tabIconSelected: tintColorLight,
+    cardBg: '#f5f4f2',
   },
   dark: {
     text: '#ECEDEE',
     secondaryText: '#ECEDEE',
-    background: '#151718',
+    background: '#333',
     cardBg: '#333',
-    tint: tintColorDark,
-    icon: '#9BA1A6',
-    tabIconDefault: '#9BA1A6',
-    tabIconSelected: tintColorDark,
   },
 };
 

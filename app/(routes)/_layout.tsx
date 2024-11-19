@@ -10,9 +10,10 @@ const RoutesLayout = () => {
         animation: 'slide_from_left',
         headerShown: false,
       }}
-      initialRouteName='profile'
+      initialRouteName='index'
       screenLayout={(props) => <Layout children={props.children} />}
     >
+      <Stack.Screen name='index' />
       <Stack.Screen name='profile' />
     </Stack>
   );

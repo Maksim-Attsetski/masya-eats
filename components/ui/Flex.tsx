@@ -10,7 +10,7 @@ interface IProps extends ViewProps {
   justify?: FlexStyle['justifyContent'];
 }
 
-const Flex: FC<IProps> = ({ gap = 12, toDown = false, ...props }) => {
+const Flex: FC<IProps> = ({ gap = 12, toDown = false, justify, ...props }) => {
   return (
     <>
       <View
@@ -22,6 +22,8 @@ const Flex: FC<IProps> = ({ gap = 12, toDown = false, ...props }) => {
             flexDirection: 'row',
             gap,
             marginTop: toDown ? 'auto' : 0,
+            justifyContent: justify,
+            alignItems: 'center',
           },
         ]}
       />

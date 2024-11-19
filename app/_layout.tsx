@@ -13,10 +13,13 @@ export default function RootLayout() {
   return (
     <ThemeProvider>
       <AuthProvider>
-        <GestureHandlerRootView style={{ flex: 1 }}>
+        <GestureHandlerRootView style={{ flex: 1, paddingHorizontal: 12 }}>
           <Stack initialRouteName='(routes)'>
+            <Stack.Screen
+              name='(routes)'
+              options={{ headerShown: false, animation: 'slide_from_left' }}
+            />
             <Stack.Screen name='(auth)' options={{ headerShown: false }} />
-            <Stack.Screen name='(routes)' options={{ headerShown: false }} />
             <Stack.Screen name='+not-found' />
           </Stack>
         </GestureHandlerRootView>
