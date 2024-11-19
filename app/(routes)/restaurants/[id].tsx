@@ -1,43 +1,76 @@
 import React, { FC, memo, useEffect, useMemo } from 'react';
-import {
-  IRestaurant,
-  RestaurantAction,
-  useRestaurant,
-} from '@/widgets/restaurants';
-import {
-  FlatList,
-  Image,
-  ScrollView,
-  StyleSheet,
-  TouchableOpacity,
-  View,
-} from 'react-native';
+import { IRestaurant, useRestaurant } from '@/widgets/restaurants';
+import { Image, StyleSheet, View } from 'react-native';
 import {
   ContainerPadding,
   SCREEN_HEIGHT,
   SCREEN_WIDTH,
   supabaseBucketImg,
 } from '@/global';
-import { Button, Flex, Gap, MiniHeader, Text } from '@/components';
-import MaterialCommunityIcons from '@expo/vector-icons/MaterialCommunityIcons';
-import AntDesign from '@expo/vector-icons/AntDesign';
-import { router, useLocalSearchParams } from 'expo-router';
-import { SafeAreaView } from 'react-native-safe-area-context';
+import { BackButton, Flex, Gap, SearchButton, Text } from '@/components';
+import { useLocalSearchParams } from 'expo-router';
+import {
+  SafeAreaView,
+  useSafeAreaInsets,
+} from 'react-native-safe-area-context';
 import RestaurantActionList from '@/widgets/restaurants/components/RestaurantActionList';
 import { RestOfferCard, useRestOffers } from '@/widgets/restaurant-offer';
+import Animated, {
+  interpolate,
+  interpolateColor,
+  useAnimatedScrollHandler,
+  useAnimatedStyle,
+  useSharedValue,
+} from 'react-native-reanimated';
 
 const imgHeight = SCREEN_HEIGHT * 0.4;
 
 const Restaurant: FC = () => {
+  const insets = useSafeAreaInsets();
+
   const id = useLocalSearchParams()?.id;
   const { restaurants } = useRestaurant();
   const { onGetRestOffers, restOffers } = useRestOffers();
+  const scrollValue = useSharedValue(0);
 
   const item: IRestaurant | undefined = useMemo(() => {
     if (restaurants.length === 0) return undefined;
 
     return restaurants.find((r) => `${r.id}` === `${id}`);
   }, [restaurants, id]);
+
+  const scrollHandler = useAnimatedScrollHandler((event) => {
+    scrollValue.value = event.contentOffset.y;
+  });
+
+  const firstNameStyles = useAnimatedStyle(() => {
+    return {
+      opacity: interpolate(scrollValue.value, [0, imgHeight / 2], [0, 1]),
+      color: '#333',
+    };
+  }, []);
+
+  const headerStyles = useAnimatedStyle(
+    () => ({
+      opacity: interpolate(scrollValue.value, [0, imgHeight / 1.3], [0, 1]),
+    }),
+    []
+  );
+
+  const secondNameStyles = useAnimatedStyle(() => {
+    return {
+      opacity: interpolate(scrollValue.value, [0, imgHeight / 2], [1, 0]),
+      transform: [
+        {
+          translateX: interpolate(
+            scrollValue.value,
+            [0, imgHeight],
+            [0, imgHeight * 1.2]
+          ),
+        },
+      ],
+    };
+  }, []);
 
   useEffect(() => {
     item?.id && onGetRestOffers(item?.id);
@@ -46,39 +79,49 @@ const Restaurant: FC = () => {
   return (
     <SafeAreaView>
       {item ? (
-        <View>
-          <Image
-            source={{
-              uri:
-                supabaseBucketImg +
-                `restaurants/${item?.public_id}.${item?.preview}`,
-            }}
-            style={styles.img}
-            height={imgHeight}
-            width={SCREEN_WIDTH}
-          />
-          <Gap />
-          <View style={styles.otherContent}>
-            <Text style={styles.name}>{item?.name}</Text>
-            <RestaurantActionList item={item} />
-            <FlatList
-              data={[...restOffers, ...restOffers]}
-              numColumns={2}
-              columnWrapperStyle={{
-                justifyContent: 'space-between',
-                gap: 12,
-              }}
-              contentContainerStyle={styles.offers}
-              scrollEnabled
-              renderItem={({ item: restOffer }) => (
-                <RestOfferCard restId={item?.public_id} restOffer={restOffer} />
-              )}
-              keyExtractor={(item, inx) => item.id + inx}
-              ListEmptyComponent={<Text>Пусто</Text>}
-              ItemSeparatorComponent={() => <Gap />}
-            />
+        <>
+          <View style={[styles.header, { flex: 1, top: insets.top }]}>
+            <Animated.View style={[headerStyles, styles.headerBg]} />
+            <View style={styles.headerBody}>
+              <BackButton />
+              <Animated.Text style={[styles.name, firstNameStyles]}>
+                {item?.name}
+              </Animated.Text>
+              <SearchButton />
+            </View>
           </View>
-        </View>
+          <Animated.ScrollView
+            onScroll={scrollHandler}
+            showsVerticalScrollIndicator={false}
+          >
+            <Image
+              source={{
+                uri:
+                  supabaseBucketImg +
+                  `restaurants/${item?.public_id}.${item?.preview}`,
+              }}
+              style={styles.img}
+              height={imgHeight}
+              width={SCREEN_WIDTH}
+            />
+            <Gap />
+            <View style={styles.otherContent}>
+              <Animated.Text style={[styles.name, secondNameStyles]}>
+                {item?.name}
+              </Animated.Text>
+              <RestaurantActionList item={item} />
+              <View style={styles.offers}>
+                {[...restOffers, ...restOffers].map((restOffer, inx) => (
+                  <RestOfferCard
+                    restId={item?.public_id}
+                    key={restOffer.id + inx}
+                    restOffer={restOffer}
+                  />
+                ))}
+              </View>
+            </View>
+          </Animated.ScrollView>
+        </>
       ) : (
         <Text>Empty</Text>
       )}
@@ -87,6 +130,25 @@ const Restaurant: FC = () => {
 };
 
 const styles = StyleSheet.create({
+  header: {
+    position: 'absolute',
+    zIndex: 2,
+    width: SCREEN_WIDTH,
+    paddingVertical: 16,
+    paddingHorizontal: ContainerPadding,
+    left: 0,
+  },
+  headerBg: {
+    position: 'absolute',
+    inset: 0,
+    backgroundColor: '#fff',
+  },
+  headerBody: {
+    justifyContent: 'space-between',
+    display: 'flex',
+    alignItems: 'center',
+    flexDirection: 'row',
+  },
   img: {
     position: 'absolute',
     inset: 0,
@@ -101,9 +163,13 @@ const styles = StyleSheet.create({
     marginTop: imgHeight / 2.1,
   },
   offers: {
-    marginTop: 10,
+    marginTop: -4,
     backgroundColor: '#fff',
-    padding: ContainerPadding * 2,
+    padding: ContainerPadding,
+    flexDirection: 'row',
+    flexWrap: 'wrap',
+    gap: 12,
+    justifyContent: 'space-between',
   },
   news: {
     fontSize: 10,

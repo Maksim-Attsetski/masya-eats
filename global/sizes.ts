@@ -6,4 +6,4 @@ export const SCREEN_HEIGHT = Dimensions.get('screen').height;
 export const WINDOW_WIDTH = Dimensions.get('window').width;
 export const WINDOW_HEIGHT = Dimensions.get('window').height;
 
-export const ContainerPadding = 8;
+export const ContainerPadding = 12;
