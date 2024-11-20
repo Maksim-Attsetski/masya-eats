@@ -4,7 +4,9 @@ import React, {
   memo,
   SetStateAction,
   useEffect,
+  useMemo,
   useRef,
+  useState,
 } from 'react';
 import { Image, StyleSheet, View } from 'react-native';
 
@@ -18,6 +20,7 @@ import {
 } from '@/global';
 import { Button, Flex, Gap, Text } from '@/components';
 import { IRestaurantOffer } from '@/widgets/restaurant-offer';
+import { useBin } from '@/widgets/bin';
 
 interface IProps {
   activeOffer: IRestaurantOffer | null;
@@ -32,6 +35,41 @@ const RestOfferModal: FC<IProps> = ({
 }) => {
   const bottomSheetRef = useRef<BottomSheet>(null);
 
+  const {} = useBin();
+
+  const { bin, onBinItemsUpdate, onRemoveItemsFromBin, binLoading } = useBin();
+
+  const itemInBin = useMemo(() => {
+    return activeOffer?.id
+      ? bin.items.find((elem) => elem.offer_id === activeOffer.id)
+      : undefined;
+  }, [bin, activeOffer?.id]);
+
+  const [inBinCount, setInBinCount] = useState(itemInBin?.count ?? 0);
+
+  const onPressAddButton = () => {
+    setInBinCount((prev) => ++prev);
+  };
+
+  const onPressDeleteButton = async () => {
+    if (inBinCount && inBinCount === 1 && activeOffer?.id) {
+      await onRemoveItemsFromBin(activeOffer.id);
+      setActiveOffer(null);
+      return;
+    } else {
+      setInBinCount((prev) => --prev);
+    }
+  };
+
+  const onPressSaveButton = async () => {
+    if (inBinCount === itemInBin?.count || !activeOffer?.id) {
+      setActiveOffer(null);
+      return;
+    }
+    await onBinItemsUpdate({ count: inBinCount, offer_id: activeOffer?.id });
+    setActiveOffer(null);
+  };
+
   useEffect(() => {
     if (activeOffer) {
       bottomSheetRef.current?.snapToIndex(0);
@@ -39,6 +77,10 @@ const RestOfferModal: FC<IProps> = ({
       bottomSheetRef.current?.close();
     }
   }, [activeOffer]);
+
+  useEffect(() => {
+    setInBinCount(itemInBin?.count ?? 0);
+  }, [itemInBin?.offer_id]);
 
   return (
     <BottomSheet
@@ -98,12 +140,12 @@ const RestOfferModal: FC<IProps> = ({
         <Gap y={20} />
         <Flex>
           <Flex>
-            <Button>-</Button>
-            <Text title>1</Text>
-            <Button>+</Button>
+            <Button btnProps={{ onPress: onPressDeleteButton }}>-</Button>
+            <Text title>{inBinCount}</Text>
+            <Button btnProps={{ onPress: onPressAddButton }}>+</Button>
           </Flex>
-          <Button full type='primary'>
-            Добавить
+          <Button full type='primary' btnProps={{ onPress: onPressSaveButton }}>
+            {inBinCount ? 'Сохранить' : 'Добавить'}
           </Button>
         </Flex>
         <Gap y={20} />
