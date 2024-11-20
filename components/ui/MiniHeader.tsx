@@ -1,4 +1,4 @@
-import React, { FC, memo, useRef } from 'react';
+import React, { FC, memo, ReactNode, useRef } from 'react';
 
 import Ionicons from '@expo/vector-icons/Ionicons';
 
@@ -8,9 +8,10 @@ import { router } from 'expo-router';
 
 interface IProps {
   title: string;
+  right?: ReactNode;
 }
 
-const MiniHeader: FC<IProps> = ({ title }) => {
+const MiniHeader: FC<IProps> = ({ title, right }) => {
   return (
     <>
       <Gap />
@@ -23,7 +24,7 @@ const MiniHeader: FC<IProps> = ({ title }) => {
           <Ionicons name='arrow-back' size={24} color='black' />
         </TouchableOpacity>
         <Text title>{title}</Text>
-        <Gap y={30} />
+        {right ? right : <Gap y={30} />}
       </Flex>
     </>
   );

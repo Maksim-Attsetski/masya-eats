@@ -1,5 +1,6 @@
 import BackButton from './BackButton';
 import Button from './Button';
+import Divider from './Divider';
 import Flex from './Flex';
 import Gap from './Gap';
 import Header from './Header';
@@ -11,6 +12,7 @@ import Text from './Text';
 
 export {
   MiniHeader,
+  Divider,
   SearchButton,
   BackButton,
   Header,

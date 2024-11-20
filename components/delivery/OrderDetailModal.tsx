@@ -23,7 +23,7 @@ interface IProps {
   restaurant?: IRestaurant;
 }
 
-const OrderDetailModal: FC<IProps> = (props) => {
+const OrderDetailModal: FC<IProps> = ({ restaurant }) => {
   const bottomSheetRef = useRef<BottomSheet>(null);
 
   const { bin } = useBin();
@@ -80,7 +80,13 @@ const OrderDetailModal: FC<IProps> = (props) => {
             </Flex>
             <Gap />
             <Button
-              btnProps={{ onPress: () => router.push('/(routes)/order') }}
+              btnProps={{
+                onPress: () =>
+                  router.push({
+                    pathname: '/(routes)/order',
+                    params: { rest: JSON.stringify(restaurant) },
+                  }),
+              }}
               type='primary'
             >
               <Flex justify='space-between' style={{ width: '80%' }}>
