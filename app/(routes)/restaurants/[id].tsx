@@ -6,6 +6,7 @@ import {
   ContainerPadding,
   SCREEN_HEIGHT,
   SCREEN_WIDTH,
+  staticColors,
   supabaseBucketImg,
 } from '@/global';
 import {
@@ -13,6 +14,7 @@ import {
   Button,
   Flex,
   Gap,
+  OrderDetailModal,
   SearchButton,
   Text,
 } from '@/components';
@@ -35,15 +37,16 @@ import Animated, {
   useSharedValue,
 } from 'react-native-reanimated';
 import BottomSheet, { BottomSheetView } from '@gorhom/bottom-sheet';
+import { useBin } from '@/widgets/bin';
 
 const imgHeight = SCREEN_HEIGHT * 0.4;
 
 const Restaurant: FC = () => {
   const insets = useSafeAreaInsets();
-  const bottomSheetRef = useRef<BottomSheet>(null);
   const id = useLocalSearchParams()?.id;
   const { restaurants } = useRestaurant();
   const { onGetRestOffers, restOffers } = useRestOffers();
+  const { bin } = useBin();
 
   const scrollValue = useSharedValue(0);
   const [activeOffer, setActiveOffer] = useState<IRestaurantOffer | null>(null);
@@ -165,6 +168,7 @@ const Restaurant: FC = () => {
                 </View>
               </View>
             </View>
+            {bin.items.length > 0 && <Gap y={105} />}
           </Animated.ScrollView>
         </>
       ) : (
@@ -175,6 +179,9 @@ const Restaurant: FC = () => {
         activeOffer={activeOffer}
         setActiveOffer={setActiveOffer}
       />
+      {!activeOffer && bin.items.length > 0 && (
+        <OrderDetailModal restaurant={item} />
+      )}
     </SafeAreaView>
   );
 };

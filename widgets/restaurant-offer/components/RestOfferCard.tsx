@@ -70,7 +70,7 @@ const RestOfferCard: FC<IProps> = ({ restOffer, restId, setActiveOffer }) => {
         />
         <View style={styles.content}>
           <Text style={styles.price} title>
-            {restOffer.price} Br {itemInBin?.count ?? 0}
+            {restOffer.price} Br
           </Text>
           <Text style={styles.name}>{restOffer.name}</Text>
           <Text style={styles.subText}>

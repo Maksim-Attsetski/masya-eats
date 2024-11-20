@@ -9,7 +9,7 @@ interface IBinStore {
 }
 
 export const useBinStore = create<IBinStore>((set) => ({
-  bin: { items: [] },
+  bin: { items: [], orderTime: new Date().toISOString() },
   isLoading: false,
   setIsLoading: (v) => set((state) => ({ isLoading: v ?? !state.isLoading })),
   setBin: (bin) => set({ bin }),
