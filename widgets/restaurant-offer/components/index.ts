@@ -1,3 +1,4 @@
 import RestOfferCard from './RestOfferCard';
+import RestOfferModal from './RestOfferModal';
 
-export { RestOfferCard };
+export { RestOfferCard, RestOfferModal };
