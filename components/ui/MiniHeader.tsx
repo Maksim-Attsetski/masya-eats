@@ -1,10 +1,6 @@
-import React, { FC, memo, ReactNode, useRef } from 'react';
+import React, { FC, memo, ReactNode } from 'react';
 
-import Ionicons from '@expo/vector-icons/Ionicons';
-
-import { Flex, Gap, Text } from '@/components';
-import { TouchableOpacity } from 'react-native';
-import { router } from 'expo-router';
+import { BackButton, Flex, Gap, Text } from '@/components';
 
 interface IProps {
   title: string;
@@ -16,13 +12,7 @@ const MiniHeader: FC<IProps> = ({ title, right }) => {
     <>
       <Gap />
       <Flex justify='space-between'>
-        <TouchableOpacity
-          onPress={() =>
-            router?.canGoBack() ? router.back() : router.push('/(routes)/index')
-          }
-        >
-          <Ionicons name='arrow-back' size={24} color='black' />
-        </TouchableOpacity>
+        <BackButton />
         <Gap />
         <Text title>{title}</Text>
         <Gap />

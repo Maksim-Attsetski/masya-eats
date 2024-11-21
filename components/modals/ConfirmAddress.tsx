@@ -28,7 +28,7 @@ const ConfirmAddress: FC = () => {
         <View style={styles.modalContainer}>
           <Text title center>
             {activeAddress
-              ? `Ваш адресс доставки ${activeAddress?.address}?`
+              ? `Ваш адресс доставки ${activeAddress?.address}, ${activeAddress?.name}?`
               : 'Укажите ваш адрес доставки'}
           </Text>
           <Gap y={16} />

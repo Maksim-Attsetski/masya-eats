@@ -28,9 +28,17 @@ const LocationProvider: FC<PropsWithChildren> = ({ children }) => {
         latitude: location?.coords.latitude,
         longitude: location?.coords.longitude,
       });
-      const formattedAddress =
-        address[0]?.street + ' ' + address[0]?.streetNumber;
-      await onAddUserLocationToAddress(formattedAddress);
+      await onAddUserLocationToAddress({
+        address: address[0]?.street ?? '',
+        name: address[0]?.streetNumber ?? '',
+        apartment: '0',
+        door_phone: 'Отсутсвует',
+        entrance: '0',
+        floor: '0',
+        id: 'no_id',
+        main: false,
+        instruction: '',
+      });
       setPermissions({ location } as IPermissions);
     } catch (error) {
       console.log(error);

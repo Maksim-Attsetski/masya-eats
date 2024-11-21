@@ -20,10 +20,10 @@ export interface IAddress {
   address: string;
   main: boolean;
   name: string;
-  entrance: number; // подъезд
-  door_phone: number; // домофон
-  floor: number; // этаж
-  apartment: number; // квартира
+  entrance: string; // подъезд
+  door_phone: string; // домофон
+  floor: string; // этаж
+  apartment: string; // квартира
   instruction: string; // инструкция для курьера
 }
 

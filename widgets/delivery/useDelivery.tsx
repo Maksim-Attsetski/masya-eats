@@ -1,6 +1,6 @@
 import { Service } from '@/global';
 import { useDeliveryStore } from './store';
-import { IDelivery, IPromoCode } from './types';
+import { IAddress, IDelivery, IPromoCode } from './types';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import { useAuth } from '../auth';
 
@@ -75,28 +75,24 @@ export const useDelivery = () => {
     deliveryService.update(store?.delivery?.id, newDelivery);
   };
 
-  const onAddUserLocationToAddress = async (address: string) => {
-    const isExist = store.delivery?.adresses.find((v) =>
-      v.address.includes(address)
-    );
-    console.log(isExist, address, store?.delivery?.adresses);
+  const onAddUserLocationToAddress = async (address: IAddress) => {
+    if (!store?.delivery) return;
 
-    !isExist &&
+    const isExist = store.delivery?.adresses.findIndex(
+      (v) => v.address.includes(address?.address) || v.id === 'no_id'
+    );
+
+    if (isExist === 0) {
+      const filteredAddresses =
+        store?.delivery?.adresses.filter((item) => item.id !== 'no_id') ?? [];
       store.setDelivery({
-        adresses: [
-          ...(store.delivery?.adresses ?? []),
-          {
-            address,
-            apartment: 1,
-            id: 'no_id',
-            promo_codes: [],
-            orderTime: 'ASAP',
-            bin: [],
-            created_at: new Date().toISOString(),
-            user_id: 'no_user',
-          },
-        ],
+        adresses: [address, ...filteredAddresses],
       } as IDelivery);
+    } else {
+      store.setDelivery({
+        adresses: [...store?.delivery?.adresses, address],
+      } as IDelivery);
+    }
   };
 
   const onUpdateOrderTime = async (newTime: string) => {

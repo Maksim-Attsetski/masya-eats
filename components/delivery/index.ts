@@ -1,3 +1,4 @@
 import OrderDetailModal from './OrderDetailModal';
+import UpdateAddressModal from './UpdateAddressModal';
 
-export { OrderDetailModal };
+export { OrderDetailModal, UpdateAddressModal };
