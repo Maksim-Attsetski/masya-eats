@@ -12,15 +12,10 @@ import { Image, StyleSheet, View } from 'react-native';
 
 import BottomSheet, { BottomSheetView } from '@gorhom/bottom-sheet';
 
-import {
-  Colors,
-  ContainerPadding,
-  SCREEN_WIDTH,
-  supabaseBucketImg,
-} from '@/global';
+import { ContainerPadding, SCREEN_WIDTH, supabaseBucketImg } from '@/global';
 import { Button, Flex, Gap, Text } from '@/components';
 import { IRestaurantOffer } from '@/widgets/restaurant-offer';
-import { useBin } from '@/widgets/bin';
+import { useBin } from '@/widgets/delivery';
 
 interface IProps {
   activeOffer: IRestaurantOffer | null;
@@ -41,7 +36,7 @@ const RestOfferModal: FC<IProps> = ({
 
   const itemInBin = useMemo(() => {
     return activeOffer?.id
-      ? bin.items.find((elem) => elem.offer_id === activeOffer.id)
+      ? bin.find((elem) => elem.offer_id === activeOffer.id)
       : undefined;
   }, [bin, activeOffer?.id]);
 

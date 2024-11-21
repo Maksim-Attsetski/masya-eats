@@ -1,20 +1,24 @@
+import { Service } from '@/global';
 import { useDeliveryStore } from './store';
 import { IDelivery, IPromoCode } from './types';
 import AsyncStorage from '@react-native-async-storage/async-storage';
+import { useAuth } from '../auth';
+
+const deliveryService = new Service('delivery');
 
 export const useDelivery = () => {
   const store = useDeliveryStore();
 
-  const onGetDelivery = async () => {
+  const onGetDelivery = async (user_id: string) => {
     try {
       store.setIsLoading(true);
 
-      const stringData = await AsyncStorage.getItem('delivery');
+      const { data, error } = await deliveryService.getBy<IDelivery>(user_id);
 
-      if (stringData) {
-        const delivery = JSON.parse(stringData);
-        store.setDelivery(delivery);
-      }
+      console.log('LOG: Delivery was getted sucessfully', data);
+      if (error) throw new Error(error.message);
+
+      data?.[0] && store.setDelivery(data[0]);
     } catch (error) {
       console.error(error);
     } finally {
@@ -30,31 +34,34 @@ export const useDelivery = () => {
       store.setIsLoading(true);
 
       if (isRemoveAction) {
-        const newItems = store.delivery.promo_codes.filter(
+        const newItems = store.delivery?.promo_codes.filter(
           (item) => item.id !== newItem?.id
         );
-        store.setDelivery({ promo_codes: newItems } as IDelivery);
-        await AsyncStorage.setItem('delivery', JSON.stringify(newItems));
+        await onUpdateDelivery({
+          promo_codes: newItems,
+          id: store?.delivery?.id,
+        } as IDelivery);
         return;
       }
 
-      const isExist = store.delivery.promo_codes.findIndex(
-        (v) => v.id === newItem.id
-      );
+      const isExist =
+        store.delivery?.promo_codes.findIndex((v) => v.id === newItem.id) ?? -1;
 
       if (isExist === -1) {
-        const newItems = [...store.delivery.promo_codes, newItem];
-        store.setDelivery({ promo_codes: newItems } as IDelivery);
-        await AsyncStorage.setItem('delivery', JSON.stringify(newItems));
+        const newItems = [...(store.delivery?.promo_codes ?? []), newItem];
+        await onUpdateDelivery({
+          promo_codes: newItems,
+          id: store?.delivery?.id,
+        } as IDelivery);
         return;
       }
 
-      store.delivery.promo_codes.splice(isExist, 1, newItem);
+      store.delivery?.promo_codes.splice(isExist, 1, newItem);
 
-      store.setDelivery({
-        promo_codes: store.delivery.promo_codes,
+      await onUpdateDelivery({
+        promo_codes: store.delivery?.promo_codes,
+        id: store?.delivery?.id,
       } as IDelivery);
-      await AsyncStorage.setItem('delivery', JSON.stringify(store.delivery));
     } catch (error) {
       console.error(error);
     } finally {
@@ -63,16 +70,13 @@ export const useDelivery = () => {
   };
 
   const onUpdateOrderTime = async (newTime: string) => {
-    store.setDelivery({ orderTime: newTime } as IDelivery);
-    await AsyncStorage.setItem(
-      'delivery',
-      JSON.stringify({ ...store.delivery, order: newTime })
-    );
+    await onUpdateDelivery({ orderTime: newTime } as IDelivery);
   };
 
   const onUpdateDelivery = async (newDelivery: IDelivery) => {
+    if (!store?.delivery?.id) return;
     store.setDelivery(newDelivery);
-    await AsyncStorage.setItem('delivery', JSON.stringify({ ...newDelivery }));
+    deliveryService.update(store?.delivery?.id, newDelivery);
   };
 
   return {

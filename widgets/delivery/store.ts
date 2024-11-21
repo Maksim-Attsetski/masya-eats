@@ -2,7 +2,7 @@ import { create } from 'zustand';
 import { IDelivery } from './types';
 
 interface IDeliveryStore {
-  delivery: IDelivery;
+  delivery: IDelivery | null;
   isLoading: boolean;
   setIsLoading: (v?: boolean) => void;
   setDelivery: (v: IDelivery) => void;
@@ -10,10 +10,13 @@ interface IDeliveryStore {
 
 export const useDeliveryStore = create<IDeliveryStore>((set) => ({
   delivery: {
-    bin: [],
     adresses: [],
-    orderTime: '',
+    bin: [],
+    id: 'no_id',
+    created_at: new Date().toISOString(),
+    orderTime: 'ASAP',
     promo_codes: [],
+    user_id: 'no_user',
   },
   isLoading: false,
   setIsLoading: (v) => set((state) => ({ isLoading: v ?? !state.isLoading })),

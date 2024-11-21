@@ -5,27 +5,43 @@ import AsyncStorage from '@react-native-async-storage/async-storage';
 export const useBin = () => {
   const { setIsLoading, delivery, setDelivery, isLoading } = useDeliveryStore();
 
-  const onBinItemsUpdate = async (newItem: IBin) => {
+  const onGetBin = async () => {
     try {
       setIsLoading(true);
+      const binAsString = await AsyncStorage.getItem('bin');
 
-      const alreadyInBin = delivery.bin.findIndex(
+      if (binAsString) {
+        setDelivery({ bin: JSON.parse(binAsString) } as IDelivery);
+      }
+    } catch (error) {
+      console.error(error);
+    } finally {
+      setIsLoading(false);
+    }
+  };
+
+  const onBinItemsUpdate = async (newItem: IBin) => {
+    try {
+      if (!delivery) return;
+      setIsLoading(true);
+
+      const alreadyInBin = delivery?.bin?.findIndex(
         (v) => v.offer_id === newItem.offer_id
       );
 
       if (alreadyInBin === -1) {
-        const newItemsInBin = [...delivery.bin, newItem];
+        const newItemsInBin = [...delivery?.bin, newItem];
         const updatedDelivery = { ...delivery, bin: newItemsInBin };
 
         setDelivery(updatedDelivery);
-        await AsyncStorage.setItem('delivery', JSON.stringify(updatedDelivery));
+        await AsyncStorage.setItem('bin', JSON.stringify(updatedDelivery));
         return;
       }
 
-      delivery.bin.splice(alreadyInBin, 1, newItem);
+      delivery?.bin?.splice(alreadyInBin, 1, newItem);
 
-      setDelivery({ bin: delivery.bin } as IDelivery);
-      await AsyncStorage.setItem('delivery', JSON.stringify({ ...delivery }));
+      setDelivery({ bin: delivery?.bin } as IDelivery);
+      await AsyncStorage.setItem('bin', JSON.stringify({ ...delivery }));
     } catch (error) {
       console.error(error);
     } finally {
@@ -37,10 +53,10 @@ export const useBin = () => {
     try {
       setIsLoading(true);
 
-      const newItems = delivery.bin.filter((item) => item.offer_id !== id);
+      const newItems = delivery?.bin?.filter((item) => item.offer_id !== id);
       setDelivery({ bin: newItems } as IDelivery);
       await AsyncStorage.setItem(
-        'delivery',
+        'bin',
         JSON.stringify({ ...delivery, bin: newItems })
       );
     } catch (error) {
@@ -51,9 +67,10 @@ export const useBin = () => {
   };
 
   return {
-    bin: delivery.bin,
+    bin: delivery?.bin,
     binLoading: isLoading,
     setBinLoading: setIsLoading,
+    onGetBin,
     onBinItemsUpdate,
     onRemoveItemsFromBin,
   };

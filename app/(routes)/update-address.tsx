@@ -7,23 +7,25 @@ const UpdateAddress: FC = () => {
   const { delivery, onUpdateDelivery } = useDelivery();
 
   const onSaveAddress = async () => {
-    await onUpdateDelivery({
-      adresses: [
-        {
-          address: 'Ул. Братская',
-          apartment: 0,
-          door_phone: 0,
-          entrance: 0,
-          floor: 0,
-          id: 'cfmweofni23oi',
-          instruction: '',
-          main: true,
-          name: 'Дом',
-        },
-      ],
-      promo_codes: [],
-      orderTime: 'ASAP',
-    });
+    console.log('updated!');
+
+    // await onUpdateDelivery({
+    //   adresses: [
+    //     {
+    //       address: 'Ул. Братская',
+    //       apartment: 0,
+    //       door_phone: 0,
+    //       entrance: 0,
+    //       floor: 0,
+    //       id: 'cfmweofni23oi',
+    //       instruction: '',
+    //       main: true,
+    //       name: 'Дом',
+    //     },
+    //   ],
+    //   promo_codes: [],
+    //   orderTime: 'ASAP',
+    // });
   };
 
   return (
@@ -32,10 +34,11 @@ const UpdateAddress: FC = () => {
       <Gap />
       <View>
         <Text>Здесь указаны ваши адреса</Text>
+        <Text>{JSON.stringify(delivery)}</Text>
 
         <Divider />
-        <Text title>{delivery.adresses[0]?.name}</Text>
-        <Text>{delivery.adresses[0]?.address}</Text>
+        <Text title>{delivery?.adresses?.[0]?.name}</Text>
+        <Text>{delivery?.adresses?.[0]?.address}</Text>
         <Divider />
 
         <Button type='primary' btnProps={{ onPress: onSaveAddress }}>

@@ -1,6 +1,8 @@
 import React, { Dispatch, FC, memo, SetStateAction, useMemo } from 'react';
 import { Image, StyleSheet, TouchableOpacity, View } from 'react-native';
 
+import MaterialCommunityIcons from '@expo/vector-icons/MaterialCommunityIcons';
+
 import { IRestaurantOffer } from '../types';
 import { Button, Flex, Text } from '@/components';
 import {
@@ -9,8 +11,7 @@ import {
   SCREEN_WIDTH,
   supabaseBucketImg,
 } from '@/global';
-import { useBin } from '@/widgets/bin';
-import MaterialCommunityIcons from '@expo/vector-icons/MaterialCommunityIcons';
+import { useBin } from '@/widgets/delivery';
 
 interface IProps {
   restOffer: IRestaurantOffer;
@@ -25,7 +26,7 @@ const RestOfferCard: FC<IProps> = ({ restOffer, restId, setActiveOffer }) => {
   const { bin, onBinItemsUpdate, onRemoveItemsFromBin, binLoading } = useBin();
 
   const itemInBin = useMemo(() => {
-    return bin.items.find((elem) => elem.offer_id === restOffer.id);
+    return bin.find((elem) => elem.offer_id === restOffer.id);
   }, [bin, restOffer?.id]);
 
   const onPressAddButton = async () => {

@@ -5,10 +5,14 @@ import { ActivityIndicator, View } from 'react-native';
 
 import { supabase } from '@/global';
 import { useAuth } from '@/widgets';
+import { useBin, useDelivery } from '@/widgets/delivery';
 
 const AuthProvider: FC<PropsWithChildren> = ({ children }) => {
   const { setUser } = useAuth();
   const [loading, setLoading] = useState(true);
+
+  const { onGetBin } = useBin();
+  const { onGetDelivery } = useDelivery();
 
   useEffect(() => {
     (async () => {
@@ -17,7 +21,15 @@ const AuthProvider: FC<PropsWithChildren> = ({ children }) => {
 
         if (access_token) {
           const res = await supabase.auth.getUser(access_token);
-          setUser(res.data.user);
+          const { user } = res.data;
+          setUser(user);
+
+          console.log('user', user);
+
+          if (user) {
+            onGetBin();
+            onGetDelivery(user?.id);
+          }
         }
       } catch (error) {
         console.error(error);

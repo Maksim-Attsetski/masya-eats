@@ -1,31 +1,22 @@
-import React, { FC, memo, useEffect, useMemo, useState } from 'react';
-import { Button, Flex, Gap, Text } from '../ui';
+import React, { FC, memo, useMemo, useState } from 'react';
 import { StyleSheet, View } from 'react-native';
-import { ContainerPadding } from '@/global';
-import Animated, {
-  FadeInUp,
-  SlideInDown,
-  SlideInUp,
-  useAnimatedStyle,
-  withTiming,
-} from 'react-native-reanimated';
-import AsyncStorage from '@react-native-async-storage/async-storage';
+
+import Animated, { SlideInUp } from 'react-native-reanimated';
 import { router } from 'expo-router';
-import { useDelivery } from '@/widgets/delivery';
-interface IUserAddress {
-  address: string;
-  main: boolean;
-}
+
+import { ContainerPadding } from '@/global';
+import { IAddress, useDelivery } from '@/widgets/delivery';
+import { Button, Flex, Gap, Text } from '../ui';
 
 const ConfirmAddress: FC = () => {
   const { delivery } = useDelivery();
 
   const [isModalOpened, setIsModalOpened] = useState<boolean>(true);
 
-  const activeAddress: IUserAddress | null = useMemo(() => {
-    const mainAddresss = delivery.adresses.find((item) => item.main);
-    return mainAddresss ?? delivery.adresses[0] ?? null;
-  }, [delivery.adresses]);
+  const activeAddress: IAddress | null = useMemo(() => {
+    const mainAddresss = delivery?.adresses?.find?.((item) => item.main);
+    return mainAddresss ?? delivery?.adresses?.[0] ?? null;
+  }, [delivery?.adresses]);
 
   const onPressUpdateAddress = () => {
     router.push('/(routes)/update-address');

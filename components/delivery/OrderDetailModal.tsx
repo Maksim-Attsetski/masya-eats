@@ -1,23 +1,20 @@
 import React, { FC, memo, useMemo, useRef } from 'react';
-import {
-  StyleSheet,
-  TouchableHighlight,
-  TouchableOpacity,
-  View,
-} from 'react-native';
-import { Button, Flex, Gap, Text } from '../ui';
+import { StyleSheet, TouchableHighlight } from 'react-native';
+
 import BottomSheet, {
   BottomSheetView,
   SCREEN_WIDTH,
 } from '@gorhom/bottom-sheet';
-import { IRestaurant } from '@/widgets/restaurants';
-import { Colors, ContainerPadding, staticColors } from '@/global';
-import MaterialCommunityIcons from '@expo/vector-icons/MaterialCommunityIcons';
 import MaterialIcons from '@expo/vector-icons/MaterialIcons';
+import MaterialCommunityIcons from '@expo/vector-icons/MaterialCommunityIcons';
 import { router } from 'expo-router';
-import { useBin } from '@/widgets/bin';
-import { IRestaurantOffer, useRestOffers } from '@/widgets/restaurant-offer';
 import Animated, { FadeInDown } from 'react-native-reanimated';
+
+import { Button, Flex, Gap, Text } from '../ui';
+import { IRestaurant } from '@/widgets/restaurants';
+import { ContainerPadding, staticColors } from '@/global';
+import { useBin } from '@/widgets/delivery';
+import { IRestaurantOffer, useRestOffers } from '@/widgets/restaurant-offer';
 
 interface IProps {
   restaurant?: IRestaurant;
@@ -36,10 +33,7 @@ const OrderDetailModal: FC<IProps> = ({ restaurant }) => {
       offersAsObj[item?.id] = item;
     });
 
-    return bin.items.reduce(
-      (a, b) => a + b.count * offersAsObj[b.offer_id].price,
-      0
-    );
+    return bin.reduce((a, b) => a + b.count * offersAsObj[b.offer_id].price, 0);
   }, [bin]);
 
   return (

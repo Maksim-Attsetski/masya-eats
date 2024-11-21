@@ -15,7 +15,7 @@ export interface IPromoCode {
   expired_at: number;
 }
 
-interface IAddress {
+export interface IAddress {
   id: string;
   address: string;
   main: boolean;
@@ -28,8 +28,11 @@ interface IAddress {
 }
 
 export interface IDelivery {
+  id: string;
   promo_codes: IPromoCode[];
   orderTime: string;
   bin: IBin[];
   adresses: IAddress[];
+  created_at: string;
+  user_id: string;
 }

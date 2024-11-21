@@ -1,28 +1,34 @@
-import React, { FC, memo, useEffect, useMemo, useRef, useState } from 'react';
-import { IRestaurant, useRestaurant } from '@/widgets/restaurants';
+import React, { FC, memo, useEffect, useMemo, useState } from 'react';
 import { FlatList, Image, StyleSheet, View } from 'react-native';
-import {
-  Colors,
-  ContainerPadding,
-  SCREEN_HEIGHT,
-  SCREEN_WIDTH,
-  staticColors,
-  supabaseBucketImg,
-} from '@/global';
-import {
-  BackButton,
-  Button,
-  Flex,
-  Gap,
-  OrderDetailModal,
-  SearchButton,
-  Text,
-} from '@/components';
+
+import Animated, {
+  interpolate,
+  useAnimatedScrollHandler,
+  useAnimatedStyle,
+  useSharedValue,
+} from 'react-native-reanimated';
 import { router, useLocalSearchParams } from 'expo-router';
 import {
   SafeAreaView,
   useSafeAreaInsets,
 } from 'react-native-safe-area-context';
+
+import {
+  Colors,
+  ContainerPadding,
+  SCREEN_HEIGHT,
+  SCREEN_WIDTH,
+  supabaseBucketImg,
+} from '@/global';
+
+import { IRestaurant, useRestaurant } from '@/widgets/restaurants';
+import {
+  BackButton,
+  Gap,
+  OrderDetailModal,
+  SearchButton,
+  Text,
+} from '@/components';
 import RestaurantActionList from '@/widgets/restaurants/components/RestaurantActionList';
 import {
   IRestaurantOffer,
@@ -30,14 +36,7 @@ import {
   RestOfferModal,
   useRestOffers,
 } from '@/widgets/restaurant-offer';
-import Animated, {
-  interpolate,
-  useAnimatedScrollHandler,
-  useAnimatedStyle,
-  useSharedValue,
-} from 'react-native-reanimated';
-import BottomSheet, { BottomSheetView } from '@gorhom/bottom-sheet';
-import { useBin } from '@/widgets/bin';
+import { useBin } from '@/widgets/delivery';
 
 const imgHeight = SCREEN_HEIGHT * 0.4;
 
@@ -168,7 +167,7 @@ const Restaurant: FC = () => {
                 </View>
               </View>
             </View>
-            {bin.items.length > 0 && <Gap y={105} />}
+            {bin.length > 0 && <Gap y={105} />}
           </Animated.ScrollView>
         </>
       ) : (
@@ -179,9 +178,7 @@ const Restaurant: FC = () => {
         activeOffer={activeOffer}
         setActiveOffer={setActiveOffer}
       />
-      {!activeOffer && bin.items.length > 0 && (
-        <OrderDetailModal restaurant={item} />
-      )}
+      {!activeOffer && bin.length > 0 && <OrderDetailModal restaurant={item} />}
     </SafeAreaView>
   );
 };

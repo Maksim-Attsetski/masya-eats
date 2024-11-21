@@ -20,7 +20,7 @@ export class Service {
     const res = await supabase
       .from(this.url)
       .select('*')
-      .eq((by ?? user_id) as string, user_id);
+      .eq((by ?? 'user_id') as string, user_id);
     return res;
   }
   async create<T>(data: T): Promise<PostgrestSingleResponse<T[]>> {

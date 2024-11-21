@@ -1,3 +1,16 @@
+import React, { FC, memo, useMemo, useRef } from 'react';
+import {
+  FlatList,
+  Image,
+  StyleSheet,
+  TouchableOpacity,
+  View,
+} from 'react-native';
+
+import AntDesign from '@expo/vector-icons/AntDesign';
+import BottomSheet from '@gorhom/bottom-sheet';
+import { useLocalSearchParams } from 'expo-router';
+
 import {
   AreYouRight,
   Button,
@@ -10,20 +23,9 @@ import {
   Text,
 } from '@/components';
 import { supabaseBucketImg } from '@/global';
-import { useBin } from '@/widgets/bin';
+import { useBin } from '@/widgets/delivery';
 import { IRestaurantOffer, useRestOffers } from '@/widgets/restaurant-offer';
 import { IRestaurant } from '@/widgets/restaurants';
-import AntDesign from '@expo/vector-icons/AntDesign';
-import BottomSheet from '@gorhom/bottom-sheet';
-import { useLocalSearchParams } from 'expo-router';
-import React, { FC, memo, useMemo, useRef } from 'react';
-import {
-  FlatList,
-  Image,
-  StyleSheet,
-  TouchableOpacity,
-  View,
-} from 'react-native';
 
 const Order: FC = () => {
   const itemAsString = useLocalSearchParams()?.rest;
@@ -47,7 +49,7 @@ const Order: FC = () => {
       offersAsObj[item?.id] = item;
     });
 
-    bin.items.forEach((item) => {
+    bin.forEach((item) => {
       if (offersAsObj[item.offer_id]) {
         offersInBinAsObj[item?.offer_id] = {
           ...offersAsObj[item.offer_id],
