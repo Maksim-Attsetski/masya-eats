@@ -10,6 +10,7 @@ interface IDeliveryStore {
 
 export const useDeliveryStore = create<IDeliveryStore>((set) => ({
   delivery: {
+    bin: [],
     adresses: [],
     orderTime: '',
     promo_codes: [],

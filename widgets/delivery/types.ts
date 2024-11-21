@@ -1,3 +1,8 @@
+export interface IBin {
+  offer_id: string;
+  count: number;
+}
+
 export interface IPromoCode {
   id: string;
   text: string;
@@ -25,5 +30,6 @@ interface IAddress {
 export interface IDelivery {
   promo_codes: IPromoCode[];
   orderTime: string;
+  bin: IBin[];
   adresses: IAddress[];
 }
