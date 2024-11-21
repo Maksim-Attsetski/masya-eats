@@ -23,7 +23,9 @@ const MiniHeader: FC<IProps> = ({ title, right }) => {
         >
           <Ionicons name='arrow-back' size={24} color='black' />
         </TouchableOpacity>
+        <Gap />
         <Text title>{title}</Text>
+        <Gap />
         {right ? right : <Gap y={30} />}
       </Flex>
     </>

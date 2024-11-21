@@ -1,4 +1,4 @@
-import { Gap, Header, Layout, Text } from '@/components';
+import { ConfirmAddress, Gap, Header, Layout, Text } from '@/components';
 import { RestaurantItem, useRestaurant } from '@/widgets/restaurants';
 import React, { FC, memo, useEffect } from 'react';
 import { FlatList } from 'react-native';
@@ -12,6 +12,7 @@ const HomeScreen: FC = () => {
 
   return (
     <Layout>
+      <ConfirmAddress />
       <Header />
       <FlatList
         ListHeaderComponent={
