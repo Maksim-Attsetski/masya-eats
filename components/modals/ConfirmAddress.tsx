@@ -11,56 +11,48 @@ import Animated, {
 } from 'react-native-reanimated';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import { router } from 'expo-router';
+import { useDelivery } from '@/widgets/delivery';
 interface IUserAddress {
   address: string;
   main: boolean;
 }
 
 const ConfirmAddress: FC = () => {
-  const [address, setAddress] = useState<IUserAddress[]>([]);
+  const { delivery } = useDelivery();
 
-  const [isModalOpened, setIsModalOpened] = useState<boolean>(false);
+  const [isModalOpened, setIsModalOpened] = useState<boolean>(true);
 
   const activeAddress: IUserAddress | null = useMemo(() => {
-    const mainAddresss = address.find((item) => item.main);
-    return mainAddresss ?? address[0] ?? null;
-  }, [address]);
-
-  const onGetUserAdresses = async () => {
-    const addressAsString = await AsyncStorage.getItem('address');
-    if (addressAsString) {
-      setAddress(JSON.parse(addressAsString));
-    }
-    setIsModalOpened(true);
-  };
+    const mainAddresss = delivery.adresses.find((item) => item.main);
+    return mainAddresss ?? delivery.adresses[0] ?? null;
+  }, [delivery.adresses]);
 
   const onPressUpdateAddress = () => {
     router.push('/(routes)/update-address');
   };
 
-  useEffect(() => {
-    onGetUserAdresses();
-  }, []);
-
   return (
     isModalOpened && (
       <View style={styles.container}>
-        {activeAddress ? (
-          <View style={styles.modalContainer}>
-            <Text title center>
-              Ваш адресс доставки {activeAddress?.address}?
-            </Text>
-            <Gap y={16} />
-            <Flex>
-              <Button
-                btnProps={{
-                  onPress: onPressUpdateAddress,
-                }}
-                size='small'
-                full
-              >
-                Нет
-              </Button>
+        <View style={styles.modalContainer}>
+          <Text title center>
+            {activeAddress
+              ? `Ваш адресс доставки ${activeAddress?.address}?`
+              : 'Укажите ваш адрес доставки'}
+          </Text>
+          <Gap y={16} />
+          <Flex>
+            <Button
+              btnProps={{
+                onPress: onPressUpdateAddress,
+              }}
+              size='small'
+              full
+              type={activeAddress?.address ? 'common' : 'primary'}
+            >
+              {activeAddress?.address ? 'Нет' : 'Перейти'}
+            </Button>
+            {activeAddress?.address && (
               <Button
                 btnProps={{
                   onPress: () => setIsModalOpened(false),
@@ -71,21 +63,9 @@ const ConfirmAddress: FC = () => {
               >
                 Да
               </Button>
-            </Flex>
-          </View>
-        ) : (
-          <View style={styles.modalContainer}>
-            <Text title center>
-              Укажите ваш адрес доставки
-            </Text>
-            <Button
-              type='primary'
-              full
-              btnProps={{ onPress: onPressUpdateAddress }}
-              children={'Перейти'}
-            ></Button>
-          </View>
-        )}
+            )}
+          </Flex>
+        </View>
         <Animated.View entering={SlideInUp} style={styles.shadow} />
       </View>
     )
