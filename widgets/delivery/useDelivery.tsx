@@ -69,14 +69,38 @@ export const useDelivery = () => {
     }
   };
 
-  const onUpdateOrderTime = async (newTime: string) => {
-    await onUpdateDelivery({ orderTime: newTime } as IDelivery);
-  };
-
   const onUpdateDelivery = async (newDelivery: IDelivery) => {
     if (!store?.delivery?.id) return;
     store.setDelivery(newDelivery);
     deliveryService.update(store?.delivery?.id, newDelivery);
+  };
+
+  const onAddUserLocationToAddress = async (address: string) => {
+    const isExist = store.delivery?.adresses.find((v) =>
+      v.address.includes(address)
+    );
+    console.log(isExist, address, store?.delivery?.adresses);
+
+    !isExist &&
+      store.setDelivery({
+        adresses: [
+          ...(store.delivery?.adresses ?? []),
+          {
+            address,
+            apartment: 1,
+            id: 'no_id',
+            promo_codes: [],
+            orderTime: 'ASAP',
+            bin: [],
+            created_at: new Date().toISOString(),
+            user_id: 'no_user',
+          },
+        ],
+      } as IDelivery);
+  };
+
+  const onUpdateOrderTime = async (newTime: string) => {
+    await onUpdateDelivery({ orderTime: newTime } as IDelivery);
   };
 
   return {
@@ -87,5 +111,6 @@ export const useDelivery = () => {
     onUpdatePromoCodes,
     onUpdateOrderTime,
     onUpdateDelivery,
+    onAddUserLocationToAddress,
   };
 };
