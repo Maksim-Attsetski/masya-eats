@@ -7,6 +7,7 @@ import { router } from 'expo-router';
 import { ContainerPadding } from '@/global';
 import { IAddress, useDelivery } from '@/widgets/delivery';
 import { Button, Flex, Gap, Text } from '../ui';
+import { getAddress } from '@/hooks';
 
 const ConfirmAddress: FC = () => {
   const { delivery } = useDelivery();
@@ -28,7 +29,10 @@ const ConfirmAddress: FC = () => {
         <View style={styles.modalContainer}>
           <Text title center>
             {activeAddress
-              ? `Ваш адресс доставки ${activeAddress?.address}, ${activeAddress?.name}?`
+              ? `Ваш адресс доставки ${getAddress(
+                  activeAddress.address,
+                  activeAddress.name
+                )}?`
               : 'Укажите ваш адрес доставки'}
           </Text>
           <Gap y={16} />

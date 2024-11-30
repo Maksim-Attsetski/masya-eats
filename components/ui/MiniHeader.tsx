@@ -16,7 +16,7 @@ const MiniHeader: FC<IProps> = ({ title, right }) => {
         <Gap />
         <Text title>{title}</Text>
         <Gap />
-        {right ? right : <Gap y={30} />}
+        {right ? right : <Gap x={50} />}
       </Flex>
     </>
   );

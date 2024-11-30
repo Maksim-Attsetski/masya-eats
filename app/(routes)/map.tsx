@@ -7,7 +7,15 @@ import * as Location from 'expo-location';
 import BottomSheet, { BottomSheetView } from '@gorhom/bottom-sheet';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 
-import { Button, Flex, Gap, MiniHeader, Text } from '@/components';
+import {
+  BackButton,
+  Button,
+  Flex,
+  Gap,
+  Input,
+  MiniHeader,
+  Text,
+} from '@/components';
 import {
   ContainerPadding,
   SCREEN_HEIGHT,
@@ -15,18 +23,22 @@ import {
   staticColors,
 } from '@/global';
 import { router } from 'expo-router';
+import { GooglePlacesAutocomplete } from 'react-native-google-places-autocomplete';
+import { getAddress } from '@/hooks';
 
 const Map: FC = () => {
   const [coords, setCoords] = useState<LatLng>({ latitude: 53, longitude: 27 });
   const [newAddress, setNewAddress] =
     useState<Location.LocationGeocodedAddress | null>(null);
+
+  const [query, setQuery] = useState<string>('');
   const [isLoading, setIsLoading] = useState<boolean>(false);
   const bottomSheetRef = useRef<BottomSheet>(null);
   const mapRef = useRef<MapView>(null);
 
   const insets = useSafeAreaInsets();
 
-  const getAddress = async () => {
+  const getAddressFromMyCoords = async () => {
     setIsLoading(true);
     try {
       const address = await Location.reverseGeocodeAsync(coords);
@@ -39,7 +51,7 @@ const Map: FC = () => {
   };
 
   const onPressChooseAddress = async () => {
-    await getAddress();
+    await getAddressFromMyCoords();
     bottomSheetRef.current?.snapToIndex(0);
   };
 
@@ -82,6 +94,10 @@ const Map: FC = () => {
     onGetMyLocation().then(onAnimateToRegion);
   }, []);
 
+  useEffect(() => {
+    setQuery(getAddress(newAddress));
+  }, [newAddress]);
+
   return (
     <>
       <View>
@@ -100,13 +116,8 @@ const Map: FC = () => {
         />
       </View>
       <View style={[styles.header, { top: insets.top }]}>
-        <MiniHeader
-          title={
-            newAddress
-              ? newAddress?.street + ', ' + newAddress?.streetNumber
-              : ''
-          }
-        />
+        <BackButton />
+        <Input inputProps={{}} />
       </View>
       <Flex style={styles.marker}>
         <MaterialCommunityIcons
@@ -139,9 +150,7 @@ const Map: FC = () => {
           <Text title center>
             {isLoading
               ? 'Ищем то, что вы выбрали'
-              : `Вы выбрали «${
-                  newAddress?.street + ', ' + newAddress?.streetNumber
-                }»`}
+              : `Вы выбрали «${getAddress(newAddress)}»`}
           </Text>
           <Gap y={20} />
           <Flex justify='space-between'>
