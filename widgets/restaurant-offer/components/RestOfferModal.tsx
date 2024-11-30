@@ -30,13 +30,11 @@ const RestOfferModal: FC<IProps> = ({
 }) => {
   const bottomSheetRef = useRef<BottomSheet>(null);
 
-  const {} = useBin();
-
-  const { bin, onBinItemsUpdate, onRemoveItemsFromBin, binLoading } = useBin();
+  const { bin, onBinItemsUpdate, onRemoveItemsFromBin } = useBin();
 
   const itemInBin = useMemo(() => {
     return activeOffer?.id
-      ? bin.find((elem) => elem.offer_id === activeOffer.id)
+      ? bin?.find((elem) => elem.offer_id === activeOffer.id)
       : undefined;
   }, [bin, activeOffer?.id]);
 

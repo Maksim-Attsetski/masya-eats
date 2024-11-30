@@ -67,7 +67,8 @@ export const useBin = () => {
   };
 
   return {
-    bin: delivery?.bin,
+    bin: [...(delivery?.bin ?? [])],
+    delivery,
     binLoading: isLoading,
     setBinLoading: setIsLoading,
     onGetBin,

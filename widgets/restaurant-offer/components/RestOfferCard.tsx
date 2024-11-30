@@ -26,7 +26,7 @@ const RestOfferCard: FC<IProps> = ({ restOffer, restId, setActiveOffer }) => {
   const { bin, onBinItemsUpdate, onRemoveItemsFromBin, binLoading } = useBin();
 
   const itemInBin = useMemo(() => {
-    return bin.find((elem) => elem.offer_id === restOffer.id);
+    return bin?.find((elem) => elem.offer_id === restOffer.id);
   }, [bin, restOffer?.id]);
 
   const onPressAddButton = async () => {

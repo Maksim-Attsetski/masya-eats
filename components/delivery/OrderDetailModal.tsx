@@ -8,7 +8,7 @@ import BottomSheet, {
 import MaterialIcons from '@expo/vector-icons/MaterialIcons';
 import MaterialCommunityIcons from '@expo/vector-icons/MaterialCommunityIcons';
 import { router } from 'expo-router';
-import Animated, { FadeInDown } from 'react-native-reanimated';
+import Animated, { FadeInDown, FadeInUp } from 'react-native-reanimated';
 
 import { Button, Flex, Gap, Text } from '../ui';
 import { IRestaurant } from '@/widgets/restaurants';
@@ -18,9 +18,10 @@ import { IRestaurantOffer, useRestOffers } from '@/widgets/restaurant-offer';
 
 interface IProps {
   restaurant?: IRestaurant;
+  final?: boolean;
 }
 
-const OrderDetailModal: FC<IProps> = ({ restaurant }) => {
+const OrderDetailModal: FC<IProps> = ({ restaurant, final = false }) => {
   const bottomSheetRef = useRef<BottomSheet>(null);
 
   const { bin } = useBin();
@@ -33,7 +34,9 @@ const OrderDetailModal: FC<IProps> = ({ restaurant }) => {
       offersAsObj[item?.id] = item;
     });
 
-    return bin.reduce((a, b) => a + b.count * offersAsObj[b.offer_id].price, 0);
+    return (
+      bin?.reduce((a, b) => a + b.count * offersAsObj[b.offer_id].price, 0) ?? 0
+    );
   }, [bin]);
 
   return (
@@ -46,7 +49,7 @@ const OrderDetailModal: FC<IProps> = ({ restaurant }) => {
             left: 0,
             right: 0,
             backgroundColor: '#fff',
-            paddingHorizontal: 12,
+            paddingHorizontal: ContainerPadding,
             paddingVertical: 12,
             width: SCREEN_WIDTH - 1,
           }}
@@ -64,7 +67,8 @@ const OrderDetailModal: FC<IProps> = ({ restaurant }) => {
                 style={{ fontSize: 14, color: staticColors.primary.bg }}
                 center
               >
-                Доставка {'0 Br'}
+                Доставка {orderPrice >= 20 ? 0 : 7}
+                {' Br'}
               </Text>
               <MaterialIcons
                 name='keyboard-arrow-right'
@@ -77,7 +81,7 @@ const OrderDetailModal: FC<IProps> = ({ restaurant }) => {
               btnProps={{
                 onPress: () =>
                   router.push({
-                    pathname: '/(routes)/order',
+                    pathname: '/(routes)/order' + (final ? '-success' : ''),
                     params: { rest: JSON.stringify(restaurant) },
                   }),
               }}

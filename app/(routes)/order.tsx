@@ -49,7 +49,7 @@ const Order: FC = () => {
       offersAsObj[item?.id] = item;
     });
 
-    bin.forEach((item) => {
+    bin?.forEach((item) => {
       if (offersAsObj[item.offer_id]) {
         offersInBinAsObj[item?.offer_id] = {
           ...offersAsObj[item.offer_id],
@@ -64,57 +64,60 @@ const Order: FC = () => {
   const onPressClearOrder = async () => {};
 
   return (
-    <Layout>
-      <MiniHeader
-        title={restaurant?.name ?? ''}
-        right={
-          <TouchableOpacity
-            onPress={() => bottomSheetRef.current?.snapToIndex(0)}
-          >
-            <AntDesign name='delete' size={20} color='black' />
-          </TouchableOpacity>
-        }
-      />
-      <Divider />
-      <FlatList
-        data={Object.values(offersInBin)}
-        renderItem={({ item }) => (
-          <Flex justify='space-between'>
-            <Flex>
-              <Image
-                source={{
-                  uri: `${supabaseBucketImg}restaurants-offers/${restaurant?.public_id}/${item.public_id}.${item.preview}`,
-                }}
-                height={50}
-                width={50}
-              />
-              <View>
-                <Text style={styles.text} title>
-                  {item.name}
-                </Text>
-                <Gap y={4} />
-                <Text style={styles.text}>
-                  {item.price} Br{' '}
-                  <Text style={styles.greyText}>{item.weight}</Text>
-                </Text>
-              </View>
+    <>
+      <Layout>
+        <MiniHeader
+          title={restaurant?.name ?? ''}
+          right={
+            <AntDesign
+              name='delete'
+              onPress={() => bottomSheetRef.current?.snapToIndex(0)}
+              size={20}
+              color='black'
+            />
+          }
+        />
+        <Divider />
+        <FlatList
+          data={Object.values(offersInBin)}
+          renderItem={({ item }) => (
+            <Flex justify='space-between'>
+              <Flex>
+                <Image
+                  source={{
+                    uri: `${supabaseBucketImg}restaurants-offers/${restaurant?.public_id}/${item.public_id}.${item.preview}`,
+                  }}
+                  height={50}
+                  width={50}
+                />
+                <View>
+                  <Text style={styles.text} title>
+                    {item.name}
+                  </Text>
+                  <Gap y={4} />
+                  <Text style={styles.text}>
+                    {item.price} Br{' '}
+                    <Text style={styles.greyText}>{item.weight}</Text>
+                  </Text>
+                </View>
+              </Flex>
+              <Flex>
+                <Button size='small'>-</Button>
+                <Text title>{item?.count}</Text>
+                <Button size='small'>+</Button>
+              </Flex>
             </Flex>
-            <Flex>
-              <Button size='small'>-</Button>
-              <Text title>{item?.count}</Text>
-              <Button size='small'>+</Button>
-            </Flex>
-          </Flex>
-        )}
-      />
-      <Gap />
-      <OrderDetailModal />
+          )}
+        />
+        <Gap />
+      </Layout>
+      <OrderDetailModal final />
       <AreYouRight
         text='Очистить всю корзину'
         onConfirm={onPressClearOrder}
         bottomSheetRef={bottomSheetRef}
       />
-    </Layout>
+    </>
   );
 };
 

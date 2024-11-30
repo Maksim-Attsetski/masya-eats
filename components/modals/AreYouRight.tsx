@@ -18,7 +18,12 @@ const AreYouRight: FC<IProps> = ({ bottomSheetRef, onConfirm, text }) => {
   };
 
   return (
-    <BottomSheet enableDynamicSizing enablePanDownToClose ref={bottomSheetRef}>
+    <BottomSheet
+      index={-1}
+      enableDynamicSizing
+      enablePanDownToClose
+      ref={bottomSheetRef}
+    >
       <BottomSheetView style={styles.container}>
         <Text center style={styles.title}>
           Вы уверены?

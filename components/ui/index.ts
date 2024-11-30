@@ -8,9 +8,11 @@ import Input from './Input';
 import Layout from './Layout';
 import MiniHeader from './MiniHeader';
 import SearchButton from './SearchButton';
+import SuccessButton from './SuccessButton';
 import Text from './Text';
 
 export {
+  SuccessButton,
   MiniHeader,
   Divider,
   SearchButton,

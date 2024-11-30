@@ -2,14 +2,16 @@ import React, { FC, memo, useEffect, useRef } from 'react';
 import { StyleSheet } from 'react-native';
 import BottomSheet, { BottomSheetView } from '@gorhom/bottom-sheet';
 
-import { Button, Flex, Gap, Text } from '../ui';
-import { useGlobalStore } from '@/global';
+import { Button, Flex, Gap, SuccessButton, Text } from '../ui';
+import { ContainerPadding, useGlobalStore } from '@/global';
 import { useAuth } from '@/widgets';
 import { router } from 'expo-router';
+import { useNotification } from '@/hooks/useNotification';
 
 const PlusModal: FC = () => {
   const ref = useRef<BottomSheet>(null);
   const { plusModal, setPlusModal } = useGlobalStore();
+  const { onSendNotification } = useNotification();
 
   const { user } = useAuth();
 
@@ -40,6 +42,17 @@ const PlusModal: FC = () => {
             <Text>Get plus sub</Text>
             <Text>Get plus sub</Text>
             <Text>Get plus sub</Text>
+            <Gap />
+            <SuccessButton
+              onPress={() =>
+                onSendNotification(
+                  'Успешно!',
+                  'Вы оформили подписку Masya Eats Plus'
+                )
+              }
+              successText='Subscribed!'
+              text='Subscribe'
+            ></SuccessButton>
           </>
         ) : (
           <>
@@ -69,7 +82,7 @@ const PlusModal: FC = () => {
 const styles = StyleSheet.create({
   container: {
     paddingVertical: 12,
-    paddingHorizontal: 6,
+    paddingHorizontal: ContainerPadding,
   },
 });
 
