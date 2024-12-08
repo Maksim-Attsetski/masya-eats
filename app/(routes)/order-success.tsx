@@ -22,7 +22,7 @@ import {
   ProgressBar,
   Text,
 } from '@/components';
-import { getAddress, getPaymentType } from '@/hooks';
+import { checkOrderProgress, getAddress, getPaymentType } from '@/hooks';
 import { useDelivery } from '@/widgets/delivery';
 import { IOrder, useOrder } from '@/widgets/order';
 import { AntDesign, MaterialCommunityIcons } from '@expo/vector-icons';
@@ -30,16 +30,6 @@ import { AntDesign, MaterialCommunityIcons } from '@expo/vector-icons';
 const defaultCoordsObj = {
   latitude: 53,
   longitude: 27,
-};
-
-const checkProgress = (order?: IOrder) => {
-  const date = new Date().getTime();
-  const orderDate = new Date(order?.created_at ?? 0).getTime();
-
-  const orderDateShouldDone = orderDate - (order?.delivery_time ?? 0) * 60000;
-  const result = (date / orderDateShouldDone) * 100;
-
-  return result >= 100 ? 100 : result;
 };
 
 const OrderSuccess: FC = () => {
@@ -54,7 +44,9 @@ const OrderSuccess: FC = () => {
   const [myCoords, setMyCoords] = useState<LatLng>(defaultCoordsObj);
 
   const activeOrder = useMemo(() => orders.find((o) => o.created_at), [orders]);
-  const [progress, setProgress] = useState<number>(checkProgress(activeOrder));
+  const [progress, setProgress] = useState<number>(
+    checkOrderProgress(activeOrder)
+  );
 
   const getCoordsFromAddress = async () => {
     if (!activeOrder) return;
@@ -100,7 +92,7 @@ const OrderSuccess: FC = () => {
 
   useEffect(() => {
     const timer = setInterval(() => {
-      const newProgress = checkProgress(activeOrder);
+      const newProgress = checkOrderProgress(activeOrder);
       setProgress(newProgress);
     }, 1000);
 
