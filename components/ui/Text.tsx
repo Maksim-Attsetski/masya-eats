@@ -19,6 +19,7 @@ const MyText: FC<IProps> = (props) => {
           fontSize: props.title ? 20 : 16,
           fontWeight: props?.title ? 'bold' : '400',
           textAlign: props.center ? 'center' : 'left',
+          fontFamily: 'SpaceMono',
         },
         props.style,
       ]}

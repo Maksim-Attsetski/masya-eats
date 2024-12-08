@@ -32,10 +32,10 @@ const LoadingView: FC<IProps> = ({
   initial = false,
   children,
 }) => {
-  return children ? (
+  return children !== undefined ? (
     <SafeAreaView style={styles.flex}>
-      {loading && <Loader initial={initial} />}
       {children}
+      {loading && <Loader initial={initial} />}
     </SafeAreaView>
   ) : (
     loading && <Loader initial={initial} />

@@ -42,9 +42,10 @@ const AuthProvider: FC<PropsWithChildren> = ({ children }) => {
   }, []);
 
   return (
-    <LoadingView initial loading={loading || deliveryLoading}>
+    <>
+      <LoadingView initial loading={loading || deliveryLoading} />
       {children}
-    </LoadingView>
+    </>
   );
 };
 

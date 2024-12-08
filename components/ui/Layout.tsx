@@ -16,8 +16,8 @@ const Layout: FC<IProps> = ({ children, loading = false }) => {
   const bgColor = useThemeColor('background');
   return (
     <SafeAreaView style={[styles.container, { backgroundColor: bgColor }]}>
-      <LoadingView loading={loading} />
       {children}
+      <LoadingView loading={loading} />
       <PlusModal />
     </SafeAreaView>
   );
