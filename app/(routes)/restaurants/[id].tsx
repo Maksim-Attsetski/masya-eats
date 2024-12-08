@@ -8,10 +8,7 @@ import Animated, {
   useSharedValue,
 } from 'react-native-reanimated';
 import { router, useLocalSearchParams } from 'expo-router';
-import {
-  SafeAreaView,
-  useSafeAreaInsets,
-} from 'react-native-safe-area-context';
+import { useSafeAreaInsets } from 'react-native-safe-area-context';
 
 import {
   Colors,
@@ -21,15 +18,19 @@ import {
   supabaseBucketImg,
 } from '@/global';
 
-import { IRestaurant, useRestaurant } from '@/widgets/restaurants';
+import {
+  IRestaurant,
+  useRestaurant,
+  RestaurantActionList,
+} from '@/widgets/restaurants';
 import {
   BackButton,
   Gap,
+  LoadingView,
   OrderDetailModal,
   SearchButton,
   Text,
 } from '@/components';
-import RestaurantActionList from '@/widgets/restaurants/components/RestaurantActionList';
 import {
   IRestaurantOffer,
   RestOfferCard,
@@ -44,7 +45,7 @@ const Restaurant: FC = () => {
   const insets = useSafeAreaInsets();
   const id = useLocalSearchParams()?.id;
   const { restaurants } = useRestaurant();
-  const { onGetRestOffers, restOffers } = useRestOffers();
+  const { onGetRestOffers, restOffers, restOffersLoading } = useRestOffers();
   const { bin } = useBin();
 
   const scrollValue = useSharedValue(0);
@@ -102,7 +103,7 @@ const Restaurant: FC = () => {
   }, [item?.id]);
 
   return (
-    <SafeAreaView>
+    <LoadingView loading={restOffersLoading}>
       {item ? (
         <>
           <View style={[styles.header, { flex: 1, top: insets.top }]}>
@@ -179,7 +180,7 @@ const Restaurant: FC = () => {
         setActiveOffer={setActiveOffer}
       />
       {!activeOffer && bin.length > 0 && <OrderDetailModal restaurant={item} />}
-    </SafeAreaView>
+    </LoadingView>
   );
 };
 

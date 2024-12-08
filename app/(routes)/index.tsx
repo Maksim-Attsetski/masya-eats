@@ -8,21 +8,16 @@ import { RestaurantItem, useRestaurant } from '@/widgets/restaurants';
 import { router } from 'expo-router';
 
 const HomeScreen: FC = () => {
-  const { onGetRestaurants, restaurants, restaurantsLoading } = useRestaurant();
-  const { orders, onGetOrders } = useOrder();
+  const { restaurants, restaurantsLoading } = useRestaurant();
+  const { orders, orderLoading } = useOrder();
 
   const activeOrder = useMemo(
     () => orders.find((o) => o.created_at) ?? orders[0],
     [orders]
   );
 
-  useEffect(() => {
-    onGetOrders();
-    onGetRestaurants();
-  }, []);
-
   return (
-    <Layout>
+    <Layout loading={orderLoading || orderLoading}>
       <ConfirmAddress />
       <Header />
       {activeOrder && (
@@ -40,7 +35,7 @@ const HomeScreen: FC = () => {
           <>
             <Text title>Рестораны</Text>
             <Gap />
-            <Text>Мы думаем они худшие. Сделайте заказ и проверьте</Text>
+            <Text>Мы думаем они худшие. Сделайте заказ и проверьте это</Text>
             <Gap />
           </>
         }

@@ -1,24 +1,45 @@
+import { useState } from 'react';
 import { orderService } from './service';
 import { useOrderStore } from './store';
 import { IOrder } from './types';
+import { useAuth } from '../auth';
 
 export const useOrder = () => {
-  const { orders, createOrder, doneOrder, setOrders } = useOrderStore();
+  const {
+    orders,
+    createOrder,
+    doneOrder,
+    setOrders,
+    orderLoading,
+    setOrderLoading,
+  } = useOrderStore();
 
-  const onGetOrders = async () => {
-    try {
-      const data = await orderService.getAll<IOrder>();
+  const { user } = useAuth();
 
-      if (data.error) throw new Error(data.error?.message);
+  const onGetOrders = async (id?: string) => {
+    if (id || user?.id) {
+      try {
+        setOrderLoading(true);
+        const data = await orderService.getBy<IOrder>(
+          id ?? user?.id ?? '',
+          'user_id'
+        );
 
-      data.data && setOrders(data.data);
-    } catch (error: any) {
-      console.log(error?.message ?? error);
+        if (data.error) throw new Error(data.error?.message);
+
+        data.data && setOrders(data.data);
+      } catch (error: any) {
+        console.log(error?.message ?? error);
+      } finally {
+        setOrderLoading(false);
+      }
     }
   };
 
   const onAddOrder = async (order: IOrder) => {
     try {
+      setOrderLoading(true);
+
       const data = await orderService.create<IOrder>(order);
       console.log(data);
 
@@ -33,11 +54,14 @@ export const useOrder = () => {
       }
     } catch (error: any) {
       console.log('error', error?.message ?? error);
+    } finally {
+      setOrderLoading(false);
     }
   };
 
   const onDoneOrder = async (id: string) => {
     try {
+      setOrderLoading(true);
       const data = await orderService.delete(id);
 
       if (data.error) throw new Error(data.error?.message);
@@ -45,11 +69,14 @@ export const useOrder = () => {
       doneOrder(id);
     } catch (error: any) {
       console.log(error?.message ?? error);
+    } finally {
+      setOrderLoading(false);
     }
   };
 
   return {
     orders,
+    orderLoading,
     onGetOrders,
     onAddOrder,
     onDoneOrder,

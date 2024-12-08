@@ -6,11 +6,17 @@ import { SafeAreaView } from 'react-native-safe-area-context';
 import { useThemeColor } from '@/hooks';
 import { PlusModal } from '../subscription';
 import { ContainerPadding, SCREEN_WIDTH } from '@/global';
+import LoadingView from './LoadingView';
 
-const Layout: FC<PropsWithChildren> = ({ children }) => {
+interface IProps extends PropsWithChildren {
+  loading?: boolean;
+}
+
+const Layout: FC<IProps> = ({ children, loading = false }) => {
   const bgColor = useThemeColor('background');
   return (
     <SafeAreaView style={[styles.container, { backgroundColor: bgColor }]}>
+      <LoadingView loading={loading} />
       {children}
       <PlusModal />
     </SafeAreaView>

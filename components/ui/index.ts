@@ -7,6 +7,7 @@ import Gap from './Gap';
 import Header from './Header';
 import Input from './Input';
 import Layout from './Layout';
+import LoadingView from './LoadingView';
 import MiniHeader from './MiniHeader';
 import ProgressBar from './ProgressBar';
 import SearchButton from './SearchButton';
@@ -14,6 +15,7 @@ import SuccessButton from './SuccessButton';
 import Text from './Text';
 
 export {
+  LoadingView,
   ProgressBar,
   Description,
   SuccessButton,

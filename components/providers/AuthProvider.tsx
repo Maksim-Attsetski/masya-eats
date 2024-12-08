@@ -6,13 +6,18 @@ import { ActivityIndicator, View } from 'react-native';
 import { supabase } from '@/global';
 import { useAuth } from '@/widgets';
 import { useBin, useDelivery } from '@/widgets/delivery';
+import { LoadingView } from '../ui';
+import { useOrder } from '@/widgets/order';
+import { useRestaurant } from '@/widgets/restaurants';
 
 const AuthProvider: FC<PropsWithChildren> = ({ children }) => {
   const { setUser } = useAuth();
   const [loading, setLoading] = useState(true);
 
   const { onGetBin } = useBin();
-  const { onGetDelivery } = useDelivery();
+  const { onGetDelivery, deliveryLoading } = useDelivery();
+  const { onGetOrders } = useOrder();
+  const { onGetRestaurants } = useRestaurant();
 
   useEffect(() => {
     (async () => {
@@ -27,10 +32,12 @@ const AuthProvider: FC<PropsWithChildren> = ({ children }) => {
           console.log('user', user);
 
           if (user) {
-            await onGetBin();
             await onGetDelivery(user?.id);
+            await onGetOrders(user?.id);
+            await onGetBin();
           }
         }
+        await onGetRestaurants();
       } catch (error: any) {
         console.error('error', error?.message ?? error);
       } finally {
@@ -40,26 +47,9 @@ const AuthProvider: FC<PropsWithChildren> = ({ children }) => {
   }, []);
 
   return (
-    <>
-      {loading && (
-        <View
-          style={{
-            position: 'absolute',
-            inset: 0,
-            backgroundColor: 'rgba(255, 255, 255,0.95)',
-            zIndex: 9999,
-            justifyContent: 'center',
-            alignItems: 'center',
-          }}
-        >
-          <ActivityIndicator
-            style={{ transform: [{ scale: 6 }] }}
-            size={'small'}
-          />
-        </View>
-      )}
+    <LoadingView initial loading={loading || deliveryLoading}>
       {children}
-    </>
+    </LoadingView>
   );
 };
 

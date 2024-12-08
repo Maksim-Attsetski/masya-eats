@@ -6,7 +6,7 @@ import { useDelivery } from '@/widgets/delivery';
 
 const LocationProvider: FC<PropsWithChildren> = ({ children }) => {
   const { setPermissions } = useGlobalStore();
-  const { onAddUserLocationToAddress } = useDelivery();
+  const { onAddUserLocationToAddress, setDeliveryLoading } = useDelivery();
 
   async function getPermission(): Promise<boolean> {
     const data = await Location.requestForegroundPermissionsAsync();
@@ -15,6 +15,7 @@ const LocationProvider: FC<PropsWithChildren> = ({ children }) => {
 
   async function getCurrentLocation() {
     try {
+      setDeliveryLoading(true);
       const isGranted = await getPermission();
       if (!isGranted) {
         return setPermissions({ location: null } as IPermissions);
@@ -42,6 +43,8 @@ const LocationProvider: FC<PropsWithChildren> = ({ children }) => {
       setPermissions({ location } as IPermissions);
     } catch (error) {
       console.log(error);
+    } finally {
+      setDeliveryLoading(false);
     }
   }
 
