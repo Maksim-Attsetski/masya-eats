@@ -8,13 +8,17 @@ import BottomSheet, {
 import MaterialIcons from '@expo/vector-icons/MaterialIcons';
 import MaterialCommunityIcons from '@expo/vector-icons/MaterialCommunityIcons';
 import { router } from 'expo-router';
-import Animated, { FadeInDown, FadeInUp } from 'react-native-reanimated';
+import Animated, { FadeInDown } from 'react-native-reanimated';
 
 import { Button, Flex, Gap, Text } from '../ui';
 import { IRestaurant } from '@/widgets/restaurants';
 import { ContainerPadding, staticColors } from '@/global';
-import { useBin } from '@/widgets/delivery';
+import { IDelivery, useBin, useDelivery } from '@/widgets/delivery';
 import { IRestaurantOffer, useRestOffers } from '@/widgets/restaurant-offer';
+import { IOrder, useOrder } from '@/widgets/order';
+import { getAddress } from '@/hooks';
+import { useAuth } from '@/widgets';
+import { PleaseLogin } from '../modals';
 
 interface IProps {
   restaurant?: IRestaurant;
@@ -22,9 +26,13 @@ interface IProps {
 }
 
 const OrderDetailModal: FC<IProps> = ({ restaurant, final = false }) => {
+  const { onUpdateDelivery, delivery } = useDelivery();
   const bottomSheetRef = useRef<BottomSheet>(null);
+  const loginBottomSheetRef = useRef<BottomSheet>(null);
 
   const { bin } = useBin();
+  const { user } = useAuth();
+  const { onAddOrder } = useOrder();
   const { restOffers } = useRestOffers();
 
   const orderPrice: number = useMemo(() => {
@@ -35,9 +43,43 @@ const OrderDetailModal: FC<IProps> = ({ restaurant, final = false }) => {
     });
 
     return (
-      bin?.reduce((a, b) => a + b.count * offersAsObj[b.offer_id].price, 0) ?? 0
+      bin?.reduce((a, b) => a + b.count * offersAsObj[b.offer_id]?.price, 0) ??
+      0
     );
-  }, [bin]);
+  }, [bin, restOffers]);
+
+  const myAddress = useMemo(() => {
+    const adress =
+      delivery?.adresses.find((addr) => addr.main) ?? delivery?.adresses[0];
+    return adress;
+  }, [delivery?.adresses]);
+
+  const onPressConfirmOrder = async () => {
+    if (!user?.id) {
+      loginBottomSheetRef.current?.snapToIndex(0);
+      return;
+    }
+
+    if (final && restaurant) {
+      await onUpdateDelivery({ from: restaurant?.address[0] } as IDelivery);
+      await onAddOrder({
+        delivery_time: restaurant?.delivery_time[1],
+        discount: 0,
+        from: restaurant?.address[0],
+        to: getAddress(myAddress?.address, myAddress?.apartment),
+        paymaent_type: 'cash',
+        price: orderPrice,
+        products: bin,
+        progress: 0,
+        user_id: user?.id,
+      } as IOrder);
+    }
+    router.push({
+      // @ts-ignore
+      pathname: '/(routes)/order' + (final ? '-success' : ''),
+      params: { rest: JSON.stringify(restaurant) },
+    });
+  };
 
   return (
     <>
@@ -79,11 +121,7 @@ const OrderDetailModal: FC<IProps> = ({ restaurant, final = false }) => {
             <Gap />
             <Button
               btnProps={{
-                onPress: () =>
-                  router.push({
-                    pathname: '/(routes)/order' + (final ? '-success' : ''),
-                    params: { rest: JSON.stringify(restaurant) },
-                  }),
+                onPress: onPressConfirmOrder,
               }}
               type='primary'
             >
@@ -144,6 +182,7 @@ const OrderDetailModal: FC<IProps> = ({ restaurant, final = false }) => {
           </Text>
         </BottomSheetView>
       </BottomSheet>
+      <PleaseLogin bottomSheetRef={loginBottomSheetRef} />
     </>
   );
 };

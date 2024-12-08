@@ -32,6 +32,7 @@ export interface IDelivery {
   promo_codes: IPromoCode[];
   orderTime: string;
   bin: IBin[];
+  from: string | null;
   adresses: IAddress[];
   created_at: string;
   user_id: string;

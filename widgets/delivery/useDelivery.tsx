@@ -1,8 +1,6 @@
 import { Service } from '@/global';
 import { useDeliveryStore } from './store';
 import { IAddress, IDelivery, IPromoCode } from './types';
-import AsyncStorage from '@react-native-async-storage/async-storage';
-import { useAuth } from '../auth';
 
 const deliveryService = new Service('delivery');
 

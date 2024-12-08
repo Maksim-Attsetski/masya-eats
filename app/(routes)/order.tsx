@@ -111,7 +111,7 @@ const Order: FC = () => {
         />
         <Gap />
       </Layout>
-      <OrderDetailModal final />
+      <OrderDetailModal restaurant={restaurant ?? undefined} final />
       <AreYouRight
         text='Очистить всю корзину'
         onConfirm={onPressClearOrder}

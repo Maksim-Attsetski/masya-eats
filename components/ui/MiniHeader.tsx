@@ -14,7 +14,9 @@ const MiniHeader: FC<IProps> = ({ title, right }) => {
       <Flex justify='space-between'>
         <BackButton />
         <Gap />
-        <Text title>{title}</Text>
+        <Text center title>
+          {title}
+        </Text>
         <Gap />
         {right ? right : <Gap x={50} />}
       </Flex>

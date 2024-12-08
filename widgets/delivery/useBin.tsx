@@ -10,11 +10,15 @@ export const useBin = () => {
       setIsLoading(true);
       const binAsString = await AsyncStorage.getItem('bin');
 
+      console.log(binAsString);
+
       if (binAsString) {
-        setDelivery({ bin: JSON.parse(binAsString) } as IDelivery);
+        const bin = JSON.parse(binAsString);
+        console.log(bin);
+        bin && setDelivery({ bin } as IDelivery);
       }
     } catch (error) {
-      console.error(error);
+      console.error('bin error', error);
     } finally {
       setIsLoading(false);
     }
@@ -34,14 +38,14 @@ export const useBin = () => {
         const updatedDelivery = { ...delivery, bin: newItemsInBin };
 
         setDelivery(updatedDelivery);
-        await AsyncStorage.setItem('bin', JSON.stringify(updatedDelivery));
+        await AsyncStorage.setItem('bin', JSON.stringify(updatedDelivery.bin));
         return;
       }
 
       delivery?.bin?.splice(alreadyInBin, 1, newItem);
 
       setDelivery({ bin: delivery?.bin } as IDelivery);
-      await AsyncStorage.setItem('bin', JSON.stringify({ ...delivery }));
+      await AsyncStorage.setItem('bin', JSON.stringify(delivery.bin));
     } catch (error) {
       console.error(error);
     } finally {
@@ -55,10 +59,7 @@ export const useBin = () => {
 
       const newItems = delivery?.bin?.filter((item) => item.offer_id !== id);
       setDelivery({ bin: newItems } as IDelivery);
-      await AsyncStorage.setItem(
-        'bin',
-        JSON.stringify({ ...delivery, bin: newItems })
-      );
+      await AsyncStorage.setItem('bin', JSON.stringify(newItems));
     } catch (error) {
       console.error(error);
     } finally {

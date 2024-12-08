@@ -24,7 +24,7 @@ export class Service {
     return res;
   }
   async create<T>(data: T): Promise<PostgrestSingleResponse<T[]>> {
-    const res = await supabase.from(this.url).insert([data]).select();
+    const res = await supabase.from(this.url).insert([data]).select('*');
     return res;
   }
   async update<T>(id: string, data: T): Promise<PostgrestSingleResponse<null>> {

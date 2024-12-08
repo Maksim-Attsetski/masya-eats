@@ -13,13 +13,18 @@ export const useDeliveryStore = create<IDeliveryStore>((set) => ({
     adresses: [],
     bin: [],
     id: 'no_id',
+    from: null,
     created_at: new Date().toISOString(),
     orderTime: 'ASAP',
     promo_codes: [],
     user_id: 'no_user',
   },
   isLoading: false,
-  setIsLoading: (v) => set((state) => ({ isLoading: v ?? !state.isLoading })),
+  setIsLoading: (v) =>
+    set((state) => ({ ...state, isLoading: v ?? !state.isLoading })),
   setDelivery: (delivery) =>
-    set((state) => ({ delivery: { ...state.delivery, ...delivery } })),
+    set((state) => ({
+      ...state,
+      delivery: { ...state.delivery, ...delivery },
+    })),
 }));

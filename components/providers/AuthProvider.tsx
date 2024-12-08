@@ -27,12 +27,12 @@ const AuthProvider: FC<PropsWithChildren> = ({ children }) => {
           console.log('user', user);
 
           if (user) {
-            onGetBin();
-            onGetDelivery(user?.id);
+            await onGetBin();
+            await onGetDelivery(user?.id);
           }
         }
-      } catch (error) {
-        console.error(error);
+      } catch (error: any) {
+        console.error('error', error?.message ?? error);
       } finally {
         setLoading(false);
       }

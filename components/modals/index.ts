@@ -1,4 +1,5 @@
 import AreYouRight from './AreYouRight';
 import ConfirmAddress from './ConfirmAddress';
+import PleaseLogin from './PleaseLogin';
 
-export { AreYouRight, ConfirmAddress };
+export { PleaseLogin, AreYouRight, ConfirmAddress };

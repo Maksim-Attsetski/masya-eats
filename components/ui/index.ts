@@ -1,5 +1,6 @@
 import BackButton from './BackButton';
 import Button from './Button';
+import Description from './Description';
 import Divider from './Divider';
 import Flex from './Flex';
 import Gap from './Gap';
@@ -12,6 +13,7 @@ import SuccessButton from './SuccessButton';
 import Text from './Text';
 
 export {
+  Description,
   SuccessButton,
   MiniHeader,
   Divider,
