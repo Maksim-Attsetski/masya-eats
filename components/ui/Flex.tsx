@@ -24,6 +24,7 @@ const Flex: FC<IProps> = ({ gap = 12, toDown = false, justify, ...props }) => {
             marginTop: toDown ? 'auto' : 0,
             justifyContent: justify,
             alignItems: 'center',
+            maxWidth: '99.9999%',
           },
         ]}
       />

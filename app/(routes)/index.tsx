@@ -1,12 +1,23 @@
+import React, { FC, memo, useEffect, useMemo } from 'react';
+import { FlatList, StyleSheet, TouchableOpacity } from 'react-native';
+
 import { ConfirmAddress, Gap, Header, Layout, Text } from '@/components';
+import { Colors, ContainerPadding } from '@/global';
+import { useOrder } from '@/widgets/order';
 import { RestaurantItem, useRestaurant } from '@/widgets/restaurants';
-import React, { FC, memo, useEffect } from 'react';
-import { FlatList } from 'react-native';
+import { router } from 'expo-router';
 
 const HomeScreen: FC = () => {
   const { onGetRestaurants, restaurants, restaurantsLoading } = useRestaurant();
+  const { orders, onGetOrders } = useOrder();
+
+  const activeOrder = useMemo(
+    () => orders.find((o) => o.created_at) ?? orders[0],
+    [orders]
+  );
 
   useEffect(() => {
+    onGetOrders();
     onGetRestaurants();
   }, []);
 
@@ -14,6 +25,16 @@ const HomeScreen: FC = () => {
     <Layout>
       <ConfirmAddress />
       <Header />
+      {activeOrder && (
+        <TouchableOpacity
+          onPress={() => router.push('/(routes)/order-success')}
+          style={styles.order}
+        >
+          <Text title center>
+            Активный заказ №{activeOrder?.public_id}
+          </Text>
+        </TouchableOpacity>
+      )}
       <FlatList
         ListHeaderComponent={
           <>
@@ -35,5 +56,15 @@ const HomeScreen: FC = () => {
     </Layout>
   );
 };
+
+const styles = StyleSheet.create({
+  order: {
+    paddingHorizontal: ContainerPadding,
+    paddingVertical: 16,
+    backgroundColor: Colors.light.cardBg,
+    borderRadius: 16,
+    marginVertical: 12,
+  },
+});
 
 export default memo(HomeScreen);

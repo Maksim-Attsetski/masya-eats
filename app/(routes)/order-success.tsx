@@ -1,5 +1,10 @@
 import React, { FC, memo, useEffect, useMemo, useRef, useState } from 'react';
-import { RefreshControl, StyleSheet, View } from 'react-native';
+import {
+  RefreshControl,
+  StyleSheet,
+  TouchableOpacity,
+  View,
+} from 'react-native';
 
 import MapView, { LatLng, PROVIDER_GOOGLE } from 'react-native-maps';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
@@ -8,15 +13,33 @@ import MapViewDirections from 'react-native-maps-directions';
 import BottomSheet, { BottomSheetView } from '@gorhom/bottom-sheet';
 
 import { ContainerPadding, SCREEN_HEIGHT, SCREEN_WIDTH } from '@/global';
-import { Description, MiniHeader, Text } from '@/components';
-import { getAddress } from '@/hooks';
+import {
+  Description,
+  Divider,
+  Flex,
+  Gap,
+  MiniHeader,
+  ProgressBar,
+  Text,
+} from '@/components';
+import { getAddress, getPaymentType } from '@/hooks';
 import { useDelivery } from '@/widgets/delivery';
-import { useOrder } from '@/widgets/order';
-import { AntDesign } from '@expo/vector-icons';
+import { IOrder, useOrder } from '@/widgets/order';
+import { AntDesign, MaterialCommunityIcons } from '@expo/vector-icons';
 
 const defaultCoordsObj = {
   latitude: 53,
   longitude: 27,
+};
+
+const checkProgress = (order?: IOrder) => {
+  const date = new Date().getTime();
+  const orderDate = new Date(order?.created_at ?? 0).getTime();
+
+  const orderDateShouldDone = orderDate - (order?.delivery_time ?? 0) * 60000;
+  const result = (date / orderDateShouldDone) * 100;
+
+  return result >= 100 ? 100 : result;
 };
 
 const OrderSuccess: FC = () => {
@@ -31,9 +54,11 @@ const OrderSuccess: FC = () => {
   const [myCoords, setMyCoords] = useState<LatLng>(defaultCoordsObj);
 
   const activeOrder = useMemo(() => orders.find((o) => o.created_at), [orders]);
+  const [progress, setProgress] = useState<number>(checkProgress(activeOrder));
 
   const getCoordsFromAddress = async () => {
     if (!activeOrder) return;
+
     setIsLoading(true);
     try {
       const newRestCoords = await Location.geocodeAsync(activeOrder?.from);
@@ -44,8 +69,14 @@ const OrderSuccess: FC = () => {
       if (!newRestCoords[0] || !newMyCoords[0]) {
         alert('Error');
       } else {
-        setRestCoords(newRestCoords[0]);
-        setMyCoords(newMyCoords[0]);
+        setRestCoords({
+          latitude: newRestCoords[0].latitude,
+          longitude: newRestCoords[0].longitude,
+        });
+        setMyCoords({
+          latitude: newMyCoords[0].latitude,
+          longitude: newMyCoords[0].longitude,
+        });
       }
 
       await onAnimateToRegion(newRestCoords[0] ?? newMyCoords[0]);
@@ -68,23 +99,24 @@ const OrderSuccess: FC = () => {
   };
 
   useEffect(() => {
+    const timer = setInterval(() => {
+      const newProgress = checkProgress(activeOrder);
+      setProgress(newProgress);
+    }, 1000);
+
+    return () => {
+      clearInterval(timer);
+    };
+  }, [activeOrder]);
+
+  useEffect(() => {
     getCoordsFromAddress();
-  }, []);
+  }, [activeOrder]);
 
   return (
     <>
       <RefreshControl refreshing={isLoading} />
-      <MapView
-        initialRegion={{
-          latitude: 53.870014299999994,
-          longitude: 27.553002499999998,
-          latitudeDelta: 2,
-          longitudeDelta: 2,
-        }}
-        ref={mapRef}
-        style={styles.map}
-        provider={PROVIDER_GOOGLE}
-      >
+      <MapView ref={mapRef} style={styles.map} provider={PROVIDER_GOOGLE}>
         <MapViewDirections
           apikey='AIzaSyCLFSyWrqnFmBETUjXRSVDvhTD55g5YOZw'
           destination={myCoords}
@@ -105,19 +137,64 @@ const OrderSuccess: FC = () => {
         <MiniHeader
           title={'Заказ №' + activeOrder?.public_id}
           right={
-            <View style={styles.infoBtn}>
+            <TouchableOpacity
+              onPress={() => bottomSheetRef.current?.snapToIndex(0)}
+              style={styles.infoBtn}
+            >
               <AntDesign name='info' size={24} color='black' />
-            </View>
+            </TouchableOpacity>
           }
         />
       </View>
-      <BottomSheet>
+      <BottomSheet index={-1} enablePanDownToClose ref={bottomSheetRef}>
         <BottomSheetView style={styles.container}>
           <View>
-            <Description title={'Цена'}>{activeOrder?.price}</Description>
-            <Description title={'Время'}>
-              {activeOrder?.delivery_time}
-            </Description>
+            <Text title center>
+              Ваш заказ выполнен {progress === 100 ? '' : `на ${progress}%`}
+            </Text>
+            <Gap y={8} />
+            <ProgressBar progress={progress} />
+            <Gap />
+            <Gap />
+            <Text title>Адреса</Text>
+            <Gap y={8} />
+            <Flex>
+              <Description title={'Откуда'}>{activeOrder?.from}</Description>
+              <Text>{'->'}</Text>
+              <Description title={'Куда'}>{activeOrder?.to}</Description>
+            </Flex>
+            <Divider />
+            <Text title>Детали</Text>
+            <Gap y={8} />
+            <Flex gap={20}>
+              <Description title={'Цена'}>{activeOrder?.price} Br</Description>
+              <Description title={'Скидка'}>
+                {activeOrder?.discount} Br
+              </Description>
+              <Description title={'Время'}>
+                {activeOrder?.delivery_time} мин.
+              </Description>
+            </Flex>
+            <Divider />
+            <Text title>Оплата</Text>
+            <Gap y={8} />
+            <Flex>
+              {activeOrder?.paymaent_type === 'cash' ? (
+                <MaterialCommunityIcons
+                  name='cash-multiple'
+                  size={24}
+                  color='green'
+                />
+              ) : (
+                <MaterialCommunityIcons
+                  name='credit-card'
+                  size={24}
+                  color='#333'
+                />
+              )}
+              <Text>{getPaymentType(activeOrder?.paymaent_type, true)}</Text>
+            </Flex>
+            <Gap />
           </View>
         </BottomSheetView>
       </BottomSheet>
@@ -132,7 +209,6 @@ const styles = StyleSheet.create({
   },
   container: {
     paddingHorizontal: ContainerPadding,
-    paddingBottom: 6,
   },
   infoBtn: {
     backgroundColor: '#fff',

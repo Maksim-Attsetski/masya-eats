@@ -8,11 +8,13 @@ import Header from './Header';
 import Input from './Input';
 import Layout from './Layout';
 import MiniHeader from './MiniHeader';
+import ProgressBar from './ProgressBar';
 import SearchButton from './SearchButton';
 import SuccessButton from './SuccessButton';
 import Text from './Text';
 
 export {
+  ProgressBar,
   Description,
   SuccessButton,
   MiniHeader,
