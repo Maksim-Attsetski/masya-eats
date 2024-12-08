@@ -1,14 +1,12 @@
 import React, { FC, memo, PropsWithChildren, useEffect, useState } from 'react';
 
-import { useAsyncStorage } from '@react-native-async-storage/async-storage';
-import { ActivityIndicator, View } from 'react-native';
-
 import { supabase } from '@/global';
 import { useAuth } from '@/widgets';
 import { useBin, useDelivery } from '@/widgets/delivery';
 import { LoadingView } from '../ui';
 import { useOrder } from '@/widgets/order';
 import { useRestaurant } from '@/widgets/restaurants';
+import { useAsyncStorage } from '@/hooks';
 
 const AuthProvider: FC<PropsWithChildren> = ({ children }) => {
   const { setUser } = useAuth();
@@ -22,21 +20,18 @@ const AuthProvider: FC<PropsWithChildren> = ({ children }) => {
   useEffect(() => {
     (async () => {
       try {
-        const access_token = await useAsyncStorage('access_token').getItem();
+        const token = await useAsyncStorage('token').getItem();
+        if (token) {
+          const response = await supabase.auth.setSession(token);
+          const { user } = response.data;
 
-        if (access_token) {
-          const res = await supabase.auth.getUser(access_token);
-          const { user } = res.data;
           setUser(user);
-
-          console.log('user', user);
-
           if (user) {
             await onGetDelivery(user?.id);
             await onGetOrders(user?.id);
-            await onGetBin();
           }
         }
+        await onGetBin();
         await onGetRestaurants();
       } catch (error: any) {
         console.error('error', error?.message ?? error);

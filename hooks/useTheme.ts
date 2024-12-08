@@ -1,6 +1,6 @@
-import { useAsyncStorage } from '@react-native-async-storage/async-storage';
 import { useEffect, useState } from 'react';
 import { Appearance, ColorSchemeName } from 'react-native';
+import { useAsyncStorage } from './useLocalStorage';
 
 export const useTheme = () => {
   const theme = Appearance.getColorScheme();
@@ -11,7 +11,7 @@ export const useTheme = () => {
 
     setIsDark(newTheme === 'dark');
     Appearance.setColorScheme(newTheme);
-    useAsyncStorage('theme').setItem(JSON.stringify(newTheme));
+    useAsyncStorage('theme').setItem(newTheme);
   };
 
   useEffect(() => {
