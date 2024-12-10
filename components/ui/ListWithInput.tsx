@@ -153,11 +153,10 @@ const ListWithInput: FC<IProps> = ({
           <View onTouchStart={onInputBlur}>
             {data.length > 0 ? (
               data.map((item, inx) => (
-                <Fragment key={inx}>
-                  {/* <Fragment key={item?.id ?? inx}> */}
-                  <Gap y={3} />
+                <Fragment key={item?.id ?? inx}>
+                  <Gap />
                   {renderItem(item, inx)}
-                  <Gap y={3} />
+                  <Gap />
                 </Fragment>
               ))
             ) : (
