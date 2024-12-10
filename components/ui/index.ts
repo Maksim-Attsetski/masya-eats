@@ -13,8 +13,12 @@ import ProgressBar from './ProgressBar';
 import SearchButton from './SearchButton';
 import SuccessButton from './SuccessButton';
 import Text from './Text';
+import ListWithInput from './ListWithInput';
+import RefreshInput from './RefreshInput';
 
 export {
+  ListWithInput,
+  RefreshInput,
   LoadingView,
   ProgressBar,
   Description,

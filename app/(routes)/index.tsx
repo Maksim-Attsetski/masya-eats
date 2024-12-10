@@ -1,14 +1,21 @@
 import React, { FC, memo, useEffect, useMemo } from 'react';
 import { FlatList, StyleSheet, TouchableOpacity } from 'react-native';
 
-import { ConfirmAddress, Gap, Header, Layout, Text } from '@/components';
+import {
+  ConfirmAddress,
+  Gap,
+  Header,
+  Layout,
+  ListWithInput,
+  Text,
+} from '@/components';
 import { Colors, ContainerPadding } from '@/global';
 import { useOrder } from '@/widgets/order';
 import { RestaurantItem, useRestaurant } from '@/widgets/restaurants';
 import { router } from 'expo-router';
 
 const HomeScreen: FC = () => {
-  const { restaurants, restaurantsLoading } = useRestaurant();
+  const { restaurants, restaurantsLoading, onGetRestaurants } = useRestaurant();
   const { orders, orderLoading } = useOrder();
 
   const activeOrder = useMemo(
@@ -30,23 +37,18 @@ const HomeScreen: FC = () => {
           </Text>
         </TouchableOpacity>
       )}
-      <FlatList
-        ListHeaderComponent={
-          <>
-            <Text title>Рестораны</Text>
-            <Gap />
-            <Text>Мы думаем они худшие. Сделайте заказ и проверьте это</Text>
-            <Gap />
-          </>
-        }
+      <Text title>Рестораны</Text>
+      <Gap />
+      <Text>Мы думаем они худшие. Сделайте заказ и проверьте это</Text>
+      <Gap />
+      <ListWithInput
         data={restaurants}
-        renderItem={({ item }) => <RestaurantItem item={item} />}
-        refreshing={restaurantsLoading}
-        ListEmptyComponent={
-          <>
-            <Text>Пусто</Text>
-          </>
-        }
+        inputPlaceholder='Поиск'
+        limitForInput={2}
+        renderItem={(item) => <RestaurantItem item={item} />}
+        onSearch={onGetRestaurants}
+        onRefresh={onGetRestaurants}
+        loading={restaurantsLoading}
       />
     </Layout>
   );

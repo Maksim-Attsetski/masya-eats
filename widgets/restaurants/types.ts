@@ -1,3 +1,9 @@
+export interface IRestLocation {
+  address: string;
+  work_from: number;
+  work_until: number;
+}
+
 export interface IRestaurant {
   id: string;
   created_at: string;
@@ -7,7 +13,7 @@ export interface IRestaurant {
   description: string;
   public_id: string;
   delivery_time: [number, number];
-  address: string[];
+  locations: IRestLocation[];
   tags: string[];
   avarage_cost: number;
   news: string[];

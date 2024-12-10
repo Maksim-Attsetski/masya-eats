@@ -61,11 +61,13 @@ const OrderDetailModal: FC<IProps> = ({ restaurant, final = false }) => {
     }
 
     if (final && restaurant) {
-      await onUpdateDelivery({ from: restaurant?.address[0] } as IDelivery);
+      await onUpdateDelivery({
+        from: restaurant?.locations[0].address,
+      } as IDelivery);
       await onAddOrder({
         delivery_time: restaurant?.delivery_time[1],
         discount: 0,
-        from: restaurant?.address[0],
+        from: restaurant?.locations[0].address,
         to: getAddress(myAddress?.address, myAddress?.apartment),
         paymaent_type: 'cash',
         price: orderPrice,

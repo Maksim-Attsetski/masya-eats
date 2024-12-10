@@ -19,14 +19,16 @@ const RestaurantItem: FC<IProps> = ({ item }) => {
       onPress={() =>
         router.push({
           pathname: '/(routes)/restaurants/[id]',
-          params: { id: item.id },
+          params: { id: item?.id },
         })
       }
       style={{ width: imgWidth }}
     >
       <Image
         source={{
-          uri: supabaseBucketImg + `restaurants/${item?.name}.${item.preview}`,
+          uri:
+            supabaseBucketImg +
+            `restaurants/${item?.public_id}.${item?.preview}`,
         }}
         style={styles.img}
         height={150}
@@ -34,22 +36,22 @@ const RestaurantItem: FC<IProps> = ({ item }) => {
       />
       <Gap />
       <Flex justify='space-between'>
-        <Text title>{item.name}</Text>
+        <Text title>{item?.name}</Text>
         <Flex gap={4}>
           <AntDesign name='star' size={14} color='black' />
-          <Text>{item.rating?.length}</Text>
+          <Text>{item?.rating?.length}</Text>
         </Flex>
       </Flex>
       <Flex gap={6}>
         <MaterialCommunityIcons name='truck-delivery' size={24} color='black' />
         <Text>
-          {item.delivery_time[0]} - {item.delivery_time[1]} мин.
+          {item?.delivery_time[0]} - {item?.delivery_time[1]} мин.
         </Text>
       </Flex>
 
       <Gap />
       <Flex>
-        {item.news.map((news) => (
+        {item?.news.map((news) => (
           <Text style={styles.news} key={news}>
             {news}
           </Text>
