@@ -118,7 +118,7 @@ const ListWithInput: FC<IProps> = ({
             }}
           />
           <TouchableOpacity
-            style={{ position: 'absolute', top: '25%', right: 15 }}
+            style={{ position: 'absolute', top: '45%', right: 15 }}
             onPress={onRefresh}
           >
             <AntDesign name='search1' size={24} color='black' />
