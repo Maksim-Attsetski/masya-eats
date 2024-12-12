@@ -1,5 +1,5 @@
 import BottomSheet, { BottomSheetView } from '@gorhom/bottom-sheet';
-import React, { FC, memo, RefObject, useState } from 'react';
+import React, { FC, memo, RefObject, useMemo, useState } from 'react';
 import { Button, Flex, Gap, Input, Text } from '../ui';
 import { IAddress, useDelivery } from '@/widgets/delivery';
 import { ContainerPadding, SCREEN_WIDTH } from '@/global';
@@ -22,6 +22,17 @@ const UpdateAddressModal: FC<IProps> = ({
   const onPressSaveButton = async () => {
     if (delivery) {
       await onAddUserLocationToAddress(address);
+    }
+  };
+
+  const onPressAddButton = async () => {
+    if (delivery) {
+      const newAddress = {
+        ...address,
+        id: (address.address + address.name).replaceAll(' ', ''),
+        main: true,
+      } as IAddress;
+      await onAddUserLocationToAddress(newAddress, true);
     }
   };
 
@@ -49,7 +60,7 @@ const UpdateAddressModal: FC<IProps> = ({
                 value: address.address,
                 onChangeText: (v) =>
                   setAddress((prev) => ({ ...prev, address: v })),
-                editable: !fromMap,
+                editable: !fromMap && address.address.length > 0,
               }}
               containerStyle={{ style: { flex: 3 } }}
               title='Адрес'
@@ -59,7 +70,7 @@ const UpdateAddressModal: FC<IProps> = ({
                 value: address.name,
                 onChangeText: (v) =>
                   setAddress((prev) => ({ ...prev, name: v })),
-                editable: !fromMap,
+                editable: !fromMap && address.address.length > 0,
               }}
               containerStyle={{ style: { flex: 1 } }}
               title='Номер дома'
@@ -121,6 +132,10 @@ const UpdateAddressModal: FC<IProps> = ({
             }}
             title='Инструкция курьеру'
           />
+          <Gap />
+          <Button btnProps={{ onPress: onPressAddButton }}>
+            Добавить как новый
+          </Button>
           <Gap />
           <Button type='primary' btnProps={{ onPress: onPressSaveButton }}>
             Сохранить

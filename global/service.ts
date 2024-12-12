@@ -14,13 +14,13 @@ export class Service {
   }
 
   async getBy<T>(
-    user_id: string,
+    value: string,
     by?: keyof T
   ): Promise<PostgrestSingleResponse<T[]>> {
     const res = await supabase
       .from(this.url)
       .select('*')
-      .eq((by ?? 'user_id') as string, user_id);
+      .eq((by ?? 'user_id') as string, value);
     return res;
   }
   async create<T>(data: T): Promise<PostgrestSingleResponse<T[]>> {

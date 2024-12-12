@@ -73,7 +73,7 @@ const OrderSuccess: FC = () => {
 
       await onAnimateToRegion(newRestCoords[0] ?? newMyCoords[0]);
     } catch (error) {
-      console.log(error);
+      console.error(error);
     } finally {
       setIsLoading(false);
     }

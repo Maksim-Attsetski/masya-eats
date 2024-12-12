@@ -10,11 +10,8 @@ export const useBin = () => {
       setIsLoading(true);
       const binAsString = await AsyncStorage.getItem('bin');
 
-      console.log(binAsString);
-
       if (binAsString) {
         const bin = JSON.parse(binAsString);
-        console.log(bin);
         bin && setDelivery({ bin } as IDelivery);
       }
     } catch (error) {

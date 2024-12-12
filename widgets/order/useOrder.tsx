@@ -29,7 +29,7 @@ export const useOrder = () => {
 
         data.data && setOrders(data.data);
       } catch (error: any) {
-        console.log(error?.message ?? error);
+        console.error(error?.message ?? error);
       } finally {
         setOrderLoading(false);
       }
@@ -41,19 +41,14 @@ export const useOrder = () => {
       setOrderLoading(true);
 
       const data = await orderService.create<IOrder>(order);
-      console.log(data);
-
       if (data.error) throw new Error(data.error?.message);
-
-      console.log('order', data.data);
-
       if (data.data[0]) {
         createOrder(data.data[0]);
       } else {
         throw new Error('Ошибка');
       }
     } catch (error: any) {
-      console.log('error', error?.message ?? error);
+      console.error('error', error?.message ?? error);
     } finally {
       setOrderLoading(false);
     }
@@ -68,7 +63,7 @@ export const useOrder = () => {
 
       doneOrder(id);
     } catch (error: any) {
-      console.log(error?.message ?? error);
+      console.error(error?.message ?? error);
     } finally {
       setOrderLoading(false);
     }

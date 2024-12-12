@@ -44,7 +44,7 @@ const Map: FC = () => {
       const address = await Location.reverseGeocodeAsync(coords);
       if (address?.[0]) setNewAddress(address?.[0]);
     } catch (error) {
-      console.log(error);
+      console.error(error);
     } finally {
       setIsLoading(false);
     }
@@ -77,14 +77,14 @@ const Map: FC = () => {
       const response = await onGetMyLocation();
       await onAnimateToRegion(response);
     } catch (error) {
-      console.log(error);
+      console.error(error);
     } finally {
       setIsLoading(false);
     }
   };
 
   const onPressConfirmAddress = async () => {
-    router.push({
+    router.replace({
       pathname: '/(routes)/update-address',
       params: { address: JSON.stringify(newAddress) },
     });

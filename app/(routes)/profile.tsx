@@ -2,13 +2,26 @@ import React from 'react';
 
 import { StyleSheet, View } from 'react-native';
 
-import { Button, Flex, Gap, Layout, MiniHeader, Text } from '@/components';
+import {
+  Button,
+  Flex,
+  Gap,
+  Layout,
+  MenuBtn,
+  MiniHeader,
+  Text,
+} from '@/components';
 import { useAuth } from '@/widgets';
 import { useTheme } from '@/hooks';
+import { router } from 'expo-router';
 
 export default function ProfileScreen() {
   const { user, onLogout } = useAuth();
   const { isDark, onChangeTheme } = useTheme();
+
+  const onPressChangeAddress = () => {
+    router.push('/(routes)/update-address');
+  };
 
   return (
     <Layout>
@@ -45,6 +58,8 @@ export default function ProfileScreen() {
 
       <Text>Имя: {user?.user_metadata?.name}</Text>
       <Text>E-mail: {user?.email}</Text>
+
+      <MenuBtn onPress={onPressChangeAddress} title='Адресса' />
 
       <Gap y={20} />
 

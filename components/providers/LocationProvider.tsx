@@ -42,7 +42,7 @@ const LocationProvider: FC<PropsWithChildren> = ({ children }) => {
       });
       setPermissions({ location } as IPermissions);
     } catch (error) {
-      console.log(error);
+      console.error(error);
     } finally {
       setDeliveryLoading(false);
     }

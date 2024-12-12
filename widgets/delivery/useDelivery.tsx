@@ -73,23 +73,36 @@ export const useDelivery = () => {
     deliveryService.update(store?.delivery?.id, newDelivery);
   };
 
-  const onAddUserLocationToAddress = async (address: IAddress) => {
+  const onAddUserLocationToAddress = async (
+    address: IAddress,
+    asNew: boolean = false
+  ) => {
     if (!store?.delivery) return;
+    store.setIsLoading(true);
 
-    const isExist = store.delivery?.adresses.findIndex(
-      (v) => v.address.includes(address?.address) || v.id === 'no_id'
-    );
+    try {
+      const isExist = store.delivery?.adresses.some((v) =>
+        v.address
+          .toLocaleLowerCase()
+          .localeCompare(address?.address.toLocaleLowerCase())
+      );
 
-    if (isExist === 0) {
-      const filteredAddresses =
-        store?.delivery?.adresses.filter((item) => item.id !== 'no_id') ?? [];
-      store.setDelivery({
+      if (isExist) return;
+
+      const filteredAddresses = asNew
+        ? store?.delivery?.adresses
+        : store?.delivery?.adresses.filter((item) => item.id !== 'no_id') ?? [];
+
+      const newDelivery = {
         adresses: [address, ...filteredAddresses],
-      } as IDelivery);
-    } else {
-      store.setDelivery({
-        adresses: [...store?.delivery?.adresses, address],
-      } as IDelivery);
+      } as IDelivery;
+
+      await deliveryService.update<IDelivery>(store.delivery.id, newDelivery);
+      store.setDelivery(newDelivery);
+    } catch (error) {
+      console.error(error);
+    } finally {
+      store.setIsLoading(false);
     }
   };
 
