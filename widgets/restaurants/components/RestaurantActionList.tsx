@@ -41,6 +41,7 @@ const RestaurantActionList: FC<IProps> = ({ item }) => {
       children: <AntDesign name='sharealt' size={24} color='black' />,
     },
   ];
+
   return (
     <FlatList
       horizontal

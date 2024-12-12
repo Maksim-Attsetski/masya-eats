@@ -193,6 +193,7 @@ const styles = StyleSheet.create({
   bottomSheet: {
     paddingHorizontal: ContainerPadding,
     paddingVertical: 12,
+    zIndex: 9999999,
   },
   title: {
     fontSize: 24,

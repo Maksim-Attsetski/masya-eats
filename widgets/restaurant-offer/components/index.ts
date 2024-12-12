@@ -1,4 +1,5 @@
 import RestOfferCard from './RestOfferCard';
 import RestOfferModal from './RestOfferModal';
+import RestOffersGenresList from './RestOffersGenresList';
 
-export { RestOfferCard, RestOfferModal };
+export { RestOffersGenresList, RestOfferCard, RestOfferModal };
