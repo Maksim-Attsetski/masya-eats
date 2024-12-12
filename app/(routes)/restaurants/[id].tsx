@@ -1,5 +1,12 @@
 import React, { FC, memo, useEffect, useMemo, useState } from 'react';
-import { FlatList, Image, StyleSheet, View } from 'react-native';
+import {
+  FlatList,
+  Image,
+  SectionList,
+  SectionListData,
+  StyleSheet,
+  View,
+} from 'react-native';
 
 import Animated, {
   interpolate,
@@ -65,6 +72,31 @@ const Restaurant: FC = () => {
     return Object.keys(result);
   }, [restOffers]);
 
+  const restOfferSections = useMemo(() => {
+    const offersAsObject: {
+      [key: string]: IRestaurantOffer[];
+    } = {};
+    const result = [];
+
+    restOffers.forEach((offer) => {
+      const title = offer.genre;
+      if (offersAsObject[title]) {
+        offersAsObject[title] = [...offersAsObject[title], offer];
+      } else {
+        offersAsObject[title] = [offer];
+      }
+    });
+
+    for (const key in offersAsObject) {
+      if (Object.prototype.hasOwnProperty.call(offersAsObject, key)) {
+        const element = offersAsObject[key];
+        result.push({ title: key, data: element });
+      }
+    }
+
+    return result;
+  }, [restOffers]);
+
   const scrollHandler = useAnimatedScrollHandler((event) => {
     scrollValue.value = event.contentOffset.y;
   });
@@ -103,7 +135,7 @@ const Restaurant: FC = () => {
   }, [item?.id]);
 
   return (
-    <LoadingView loading={restOffersLoading}>
+    <LoadingView loading={false}>
       {item ? (
         <>
           <View style={[styles.header, { flex: 1, top: insets.top }]}>
@@ -125,6 +157,7 @@ const Restaurant: FC = () => {
           </View>
           <Animated.ScrollView
             onScroll={scrollHandler}
+            nestedScrollEnabled
             showsVerticalScrollIndicator={false}
           >
             <Image
@@ -156,16 +189,26 @@ const Restaurant: FC = () => {
                 />
                 <Gap />
                 <Gap />
-                <View style={styles.offers}>
-                  {[...restOffers, ...restOffers].map((restOffer, inx) => (
+                <SectionList
+                  sections={restOfferSections}
+                  keyExtractor={(item) => item.id}
+                  nestedScrollEnabled
+                  ItemSeparatorComponent={() => <Gap />}
+                  contentContainerStyle={styles.offers}
+                  initialNumToRender={7}
+                  renderItem={({ item: restOffer }) => (
                     <RestOfferCard
                       setActiveOffer={setActiveOffer}
                       restId={item?.public_id}
-                      key={restOffer.id + inx}
                       restOffer={restOffer}
                     />
-                  ))}
-                </View>
+                  )}
+                  renderSectionHeader={({ section: { title } }) => (
+                    <Text title style={{ marginVertical: 12 }}>
+                      {title}
+                    </Text>
+                  )}
+                />
               </View>
             </View>
             {bin.length > 0 && <Gap y={105} />}
@@ -234,15 +277,6 @@ const styles = StyleSheet.create({
     flexWrap: 'wrap',
     gap: 12,
     justifyContent: 'space-between',
-  },
-  news: {
-    fontSize: 10,
-    fontWeight: '600',
-    color: 'green',
-    paddingHorizontal: 12,
-    paddingVertical: 6,
-    backgroundColor: 'lightgreen',
-    borderRadius: 12,
   },
 });
 
