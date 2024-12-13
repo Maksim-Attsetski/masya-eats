@@ -17,6 +17,10 @@ const MyThemeProvider: FC<PropsWithChildren> = ({ children }) => {
     SpaceMono: require('../../assets/fonts/SpaceMono-Regular.ttf'),
   });
 
+  if (!loaded) {
+    return <LoadingView loading initial></LoadingView>;
+  }
+
   return (
     <ThemeProvider value={colorScheme === 'dark' ? DarkTheme : DefaultTheme}>
       <StatusBar style='auto' />
