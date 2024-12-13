@@ -85,7 +85,7 @@ const Map: FC = () => {
 
   const onPressConfirmAddress = async () => {
     router.replace({
-      pathname: '/(routes)/update-address',
+      pathname: '/(routes)/profile/address',
       params: { address: JSON.stringify(newAddress) },
     });
   };

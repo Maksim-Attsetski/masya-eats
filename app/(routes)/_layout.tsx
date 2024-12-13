@@ -14,7 +14,6 @@ const RoutesLayout = () => {
     >
       <Stack.Screen name='index' />
       <Stack.Screen name='profile' />
-      <Stack.Screen name='update-address' />
       <Stack.Screen name='order' />
       <Stack.Screen name='map' />
       <Stack.Screen name='restaurants/[id]' />

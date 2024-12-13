@@ -4,10 +4,10 @@ import { FlatList, View } from 'react-native';
 import BottomSheet from '@gorhom/bottom-sheet';
 import { LocationGeocodedAddress } from 'expo-location';
 import { router, useLocalSearchParams } from 'expo-router';
+import { AntDesign } from '@expo/vector-icons';
 
 import {
   Button,
-  Divider,
   Flex,
   Gap,
   Layout,
@@ -16,9 +16,8 @@ import {
   UpdateAddressModal,
 } from '@/components';
 import { IAddress, IDelivery, useDelivery } from '@/widgets/delivery';
-import { AntDesign } from '@expo/vector-icons';
 
-const UpdateAddress: FC = () => {
+const Address: FC = () => {
   const addressFromMapAsString = useLocalSearchParams()?.address;
   const updateModalRef = useRef<BottomSheet>(null);
   const { delivery, onUpdateDelivery, deliveryLoading } = useDelivery();
@@ -120,4 +119,4 @@ const UpdateAddress: FC = () => {
   );
 };
 
-export default memo(UpdateAddress);
+export default memo(Address);

@@ -17,7 +17,7 @@ const ProfileLayout = () => {
       <Stack.Screen name='notifications' />
       <Stack.Screen name='promocodes' />
       <Stack.Screen name='orders' />
-      {/* <Stack.Screen name='update-address' /> */}
+      <Stack.Screen name='address' />
     </Stack>
   );
 };

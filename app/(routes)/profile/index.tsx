@@ -20,7 +20,7 @@ export default function ProfileScreen() {
   const { isDark, onChangeTheme } = useTheme();
 
   const onPressChangeAddress = () => {
-    router.push('/(routes)/update-address');
+    router.push('/(routes)/profile/address');
   };
 
   const onPressMenuBtn = (to: string) => {

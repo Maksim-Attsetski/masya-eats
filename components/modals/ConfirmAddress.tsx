@@ -21,7 +21,7 @@ const ConfirmAddress: FC = () => {
   }, [delivery?.adresses]);
 
   const onPressUpdateAddress = () => {
-    router.push('/(routes)/update-address');
+    router.push('/(routes)/profile/address');
   };
 
   return (
