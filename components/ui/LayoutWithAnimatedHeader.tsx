@@ -9,9 +9,10 @@ import Animated, {
 
 interface IProps extends PropsWithChildren {
   title: string;
+  loading?: boolean;
 }
 
-const LayoutWithAnimatedHeader: FC<IProps> = ({ children, title }) => {
+const LayoutWithAnimatedHeader: FC<IProps> = ({ children, title, loading }) => {
   const scrollY = useSharedValue(0);
 
   const onScrollHandler = useAnimatedScrollHandler({
@@ -21,7 +22,7 @@ const LayoutWithAnimatedHeader: FC<IProps> = ({ children, title }) => {
   });
 
   return (
-    <Layout>
+    <Layout loading={loading}>
       <AnimatedHeader scrollY={scrollY} title={title} />
       <Animated.ScrollView
         onScroll={onScrollHandler}

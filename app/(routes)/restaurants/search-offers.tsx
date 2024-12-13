@@ -37,7 +37,11 @@ const SearchOffers: FC = () => {
         style={{ marginVertical: 12 }}
         showsVerticalScrollIndicator={false}
         renderItem={({ item }) => (
-          <RestOfferCard restId={id as string} restOffer={item} />
+          <RestOfferCard
+            setActiveOffer={() => {}}
+            restId={id as string}
+            restOffer={item}
+          />
         )}
         ListEmptyComponent={() => <Text>Что-то ничего не нашлось</Text>}
       />
