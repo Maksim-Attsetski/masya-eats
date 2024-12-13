@@ -4,13 +4,14 @@ import { StyleSheet, View } from 'react-native';
 import Animated, { SlideInUp } from 'react-native-reanimated';
 import { router } from 'expo-router';
 
-import { ContainerPadding } from '@/global';
+import { ContainerPadding, useGlobalStore } from '@/global';
 import { IAddress, useDelivery } from '@/widgets/delivery';
 import { Button, Flex, Gap, Text } from '../ui';
 import { getAddress } from '@/hooks';
 
 const ConfirmAddress: FC = () => {
   const { delivery } = useDelivery();
+  const { token } = useGlobalStore();
 
   const [isModalOpened, setIsModalOpened] = useState<boolean>(true);
 
@@ -24,7 +25,8 @@ const ConfirmAddress: FC = () => {
   };
 
   return (
-    isModalOpened && (
+    isModalOpened &&
+    token && (
       <View style={styles.container}>
         <View style={styles.modalContainer}>
           <Text title center>

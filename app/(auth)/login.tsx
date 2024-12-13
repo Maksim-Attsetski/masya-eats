@@ -21,7 +21,7 @@ const Login = () => {
   const onSubmit = async () => {
     if (isFormValid) {
       await onLogin({ email, password: pass });
-      router.replace('/(routes)/index');
+      router.replace('/(routes)');
     }
   };
 

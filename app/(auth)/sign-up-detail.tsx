@@ -28,7 +28,7 @@ const SignUp = () => {
         password: pass,
         options: { data: { name } },
       });
-      router.replace('/(routes)/index');
+      router.replace('/(routes)');
     }
   };
 

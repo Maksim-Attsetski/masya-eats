@@ -13,7 +13,7 @@ import {
 } from '@/components';
 import { useAuth } from '@/widgets';
 import { useTheme } from '@/hooks';
-import { router } from 'expo-router';
+import { RelativePathString, router } from 'expo-router';
 
 export default function ProfileScreen() {
   const { user, onLogout } = useAuth();
@@ -21,6 +21,10 @@ export default function ProfileScreen() {
 
   const onPressChangeAddress = () => {
     router.push('/(routes)/update-address');
+  };
+
+  const onPressMenuBtn = (to: string) => {
+    router.push(('/(routes)/profile/' + to) as RelativePathString);
   };
 
   return (
@@ -59,7 +63,18 @@ export default function ProfileScreen() {
       <Text>Имя: {user?.user_metadata?.name}</Text>
       <Text>E-mail: {user?.email}</Text>
 
+      <MenuBtn onPress={() => onPressMenuBtn('orders')} title='Заказы' />
+      <MenuBtn
+        onPress={() => onPressMenuBtn('collections')}
+        title='Коллекция'
+      />
+      <MenuBtn
+        onPress={() => onPressMenuBtn('notifications')}
+        title='Уведомления'
+      />
+      <MenuBtn onPress={() => onPressMenuBtn('promocodes')} title='Промокоды' />
       <MenuBtn onPress={onPressChangeAddress} title='Адресса' />
+      <MenuBtn onPress={() => onPressMenuBtn('about')} title='О нас' />
 
       <Gap y={20} />
 
