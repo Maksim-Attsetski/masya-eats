@@ -97,7 +97,11 @@ export const useDelivery = () => {
         adresses: [address, ...filteredAddresses],
       } as IDelivery;
 
-      await deliveryService.update<IDelivery>(store.delivery.id, newDelivery);
+      asNew &&
+        (await deliveryService.update<IDelivery>(
+          store.delivery.id,
+          newDelivery
+        ));
       store.setDelivery(newDelivery);
     } catch (error) {
       console.error(error);

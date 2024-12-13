@@ -15,7 +15,6 @@ export default function About() {
   return (
     <LayoutWithAnimatedHeader title='О нас'>
       <ScrollView showsVerticalScrollIndicator={false}>
-        <Gap />
         <Text>
           Lorem ipsum dolor sit amet, consectetur adipisicing elit. Quaerat
           corporis incidunt suscipit. Veritatis vero molestias minus sit

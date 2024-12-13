@@ -22,7 +22,7 @@ const HEADER_HEIGHT = 60;
 const TEXT_PADDING = 40;
 const FULL_HEADER_HEIGHT = HEADER_HEIGHT + TEXT_PADDING;
 const BTN_SIZE = 40;
-const input = [0, 100];
+const input = [0, 50];
 
 const AnimatedHeader: FC<IProps> = ({ title, scrollY, btn = null }) => {
   const insets = useSafeAreaInsets();
@@ -43,7 +43,7 @@ const AnimatedHeader: FC<IProps> = ({ title, scrollY, btn = null }) => {
     top: interpolate(
       scrollY.value,
       input,
-      [TEXT_PADDING + 8, HEADER_HEIGHT / 5],
+      [TEXT_PADDING + 8, HEADER_HEIGHT / 4],
       Extrapolation.CLAMP
     ),
     left: interpolate(
@@ -61,7 +61,7 @@ const AnimatedHeader: FC<IProps> = ({ title, scrollY, btn = null }) => {
         <Animated.Text style={animTextStyles}>{title}</Animated.Text>
       </Animated.View>
       <View style={[styles.btn, styles.left]}>
-        <BackButton />
+        <BackButton withoutBg />
       </View>
       {btn && <View style={[styles.btn, styles.right]}>{btn}</View>}
     </>

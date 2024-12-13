@@ -5,10 +5,18 @@ import Ionicons from '@expo/vector-icons/Ionicons';
 import { TouchableOpacity } from 'react-native';
 import { router } from 'expo-router';
 
-const BackButton: FC = () => {
+interface IProps {
+  withoutBg?: boolean;
+}
+
+const BackButton: FC<IProps> = ({ withoutBg = false }) => {
   return (
     <TouchableOpacity
-      style={{ backgroundColor: '#fff', padding: 8, borderRadius: 24 }}
+      style={{
+        backgroundColor: withoutBg ? 'transparent' : '#fff',
+        padding: 8,
+        borderRadius: 24,
+      }}
       onPress={() =>
         router?.canGoBack() ? router.back() : router.push('/(routes)')
       }
