@@ -10,7 +10,7 @@ const BackButton: FC = () => {
     <TouchableOpacity
       style={{ backgroundColor: '#fff', padding: 8, borderRadius: 24 }}
       onPress={() =>
-        router?.canGoBack() ? router.back() : router.push('/(routes)/index')
+        router?.canGoBack() ? router.back() : router.push('/(routes)')
       }
     >
       <Ionicons name='arrow-back' size={24} color='black' />

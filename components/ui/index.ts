@@ -16,8 +16,12 @@ import Text from './Text';
 import ListWithInput from './ListWithInput';
 import RefreshInput from './RefreshInput';
 import MenuBtn from './MenuBtn';
+import AnimatedHeader from './AnimatedHeader';
+import LayoutWithAnimatedHeader from './LayoutWithAnimatedHeader';
 
 export {
+  LayoutWithAnimatedHeader,
+  AnimatedHeader,
   MenuBtn,
   ListWithInput,
   RefreshInput,

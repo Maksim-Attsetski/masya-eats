@@ -2,13 +2,19 @@ import React from 'react';
 
 import { StyleSheet } from 'react-native';
 
-import { Layout, MiniHeader } from '@/components';
+import { Divider, LayoutWithAnimatedHeader, Text } from '@/components';
 
-export default function PromoCodes() {
+export default function Promocodes() {
   return (
-    <Layout>
-      <MiniHeader title={'Уведомления'} />
-    </Layout>
+    <LayoutWithAnimatedHeader title='Мои промокоды'>
+      <>
+        <Text>Коллекция 1</Text>
+        <Divider />
+        <Text>Коллекция 2</Text>
+        <Divider />
+        <Text>Коллекция 3</Text>
+      </>
+    </LayoutWithAnimatedHeader>
   );
 }
 

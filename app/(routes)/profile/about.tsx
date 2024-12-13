@@ -1,12 +1,19 @@
 import React from 'react';
 
-import { Divider, Gap, Layout, MiniHeader, Text } from '@/components';
+import {
+  AnimatedHeader,
+  Divider,
+  Gap,
+  Layout,
+  LayoutWithAnimatedHeader,
+  MiniHeader,
+  Text,
+} from '@/components';
 import { ScrollView } from 'react-native';
 
 export default function About() {
   return (
-    <Layout>
-      <MiniHeader title={'О нас'} />
+    <LayoutWithAnimatedHeader title='О нас'>
       <ScrollView showsVerticalScrollIndicator={false}>
         <Gap />
         <Text>
@@ -29,8 +36,26 @@ export default function About() {
           odio hic obcaecati ipsa. Cupiditate soluta perspiciatis doloremque
           sint. Aliquid?
         </Text>
+        <Divider />
+        <Text>
+          Lorem ipsum dolor sit amet consectetur, adipisicing elit. Nam dolorem
+          unde a debitis culpa sit neque placeat praesentium impedit! Cum minus
+          maxime, commodi quo neque magni iusto voluptas totam accusantium
+          porro, dolorem laborum nisi quis assumenda optio dolore ad blanditiis
+          odio hic obcaecati ipsa. Cupiditate soluta perspiciatis doloremque
+          sint. Aliquid?
+        </Text>
+        <Divider />
+        <Text>
+          Lorem ipsum dolor sit amet consectetur, adipisicing elit. Nam dolorem
+          unde a debitis culpa sit neque placeat praesentium impedit! Cum minus
+          maxime, commodi quo neque magni iusto voluptas totam accusantium
+          porro, dolorem laborum nisi quis assumenda optio dolore ad blanditiis
+          odio hic obcaecati ipsa. Cupiditate soluta perspiciatis doloremque
+          sint. Aliquid?
+        </Text>
         <Gap />
       </ScrollView>
-    </Layout>
+    </LayoutWithAnimatedHeader>
   );
 }
