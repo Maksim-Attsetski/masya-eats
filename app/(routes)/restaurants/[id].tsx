@@ -44,6 +44,7 @@ import {
 } from '@/widgets/restaurant-offer';
 import { useBin } from '@/widgets/delivery';
 import { getRestOfferSections } from '@/hooks';
+import Empty from '@/components/ui/Empty';
 
 const imgHeight = SCREEN_HEIGHT * 0.4;
 const HEADER_HEIGHT = 65;
@@ -151,7 +152,7 @@ const RestOffersList: FC = () => {
                 }
               />
             </View>
-            {!imgVisible && (
+            {!imgVisible && restOfferSections.length > 0 && (
               <Animated.View
                 key={'restOffersGenresList'}
                 entering={FadeInUp}
@@ -185,7 +186,7 @@ const RestOffersList: FC = () => {
                     {item?.name}
                   </Animated.Text>
                   <RestaurantActionList item={item} />
-                  {imgVisible && (
+                  {imgVisible && restOfferSections.length > 0 && (
                     <Animated.View
                       key={'restOffersGenresList'}
                       entering={FadeInDown}
@@ -205,6 +206,7 @@ const RestOffersList: FC = () => {
             data={restOfferSections}
             scrollEnabled
             ref={flatListRef}
+            ListEmptyComponent={<Empty />}
             scrollEventThrottle={16}
             renderItem={({ item: { data, title } }) => (
               <View style={styles.offersContainer}>
