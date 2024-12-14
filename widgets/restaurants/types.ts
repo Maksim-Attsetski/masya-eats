@@ -17,7 +17,7 @@ export interface IRestPromotion {
   isFullScreen: boolean;
 }
 
-export interface IRestaurant {
+export interface IRestaurantBase {
   id: string;
   created_at: string;
   name: string;
@@ -30,5 +30,12 @@ export interface IRestaurant {
   avarage_cost: number; // ср чек -> 1 = $ -> 2 = $$ -> 3 = $$$
   delivery_cost: number; // стоимость доставки
   free_delivery_from: number; // бесплатная доставка от ...
+  tags: string[];
+}
+export interface IRestaurant extends IRestaurantBase {
   rating: { rate: number; user_id: string }[] | null;
+}
+
+export interface IRestaurantWithRating extends IRestaurantBase {
+  rating: number;
 }

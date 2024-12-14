@@ -167,6 +167,7 @@ const RestOffersList: FC = () => {
           </View>
           <Animated.FlatList
             onScroll={scrollHandler}
+            showsVerticalScrollIndicator={false}
             ListHeaderComponent={() => (
               <View style={{ height: imgHeight }}>
                 <Image

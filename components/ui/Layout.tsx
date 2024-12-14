@@ -1,6 +1,6 @@
 import React, { FC, memo, PropsWithChildren } from 'react';
 
-import { StyleSheet } from 'react-native';
+import { ScrollView, StyleSheet } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 
 import { useThemeColor } from '@/hooks';
@@ -10,13 +10,28 @@ import LoadingView from './LoadingView';
 
 interface IProps extends PropsWithChildren {
   loading?: boolean;
+  scrollable?: boolean;
 }
 
-const Layout: FC<IProps> = ({ children, loading = false }) => {
+const Layout: FC<IProps> = ({
+  children,
+  loading = false,
+  scrollable = false,
+}) => {
   const bgColor = useThemeColor('background');
   return (
     <SafeAreaView style={[styles.container, { backgroundColor: bgColor }]}>
-      {children}
+      {scrollable ? (
+        <ScrollView
+          showsVerticalScrollIndicator={false}
+          scrollEventThrottle={16}
+        >
+          {children}
+        </ScrollView>
+      ) : (
+        children
+      )}
+
       <LoadingView loading={loading} />
       <PlusModal />
     </SafeAreaView>

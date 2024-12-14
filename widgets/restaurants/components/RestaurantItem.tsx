@@ -1,7 +1,7 @@
 import React, { FC, memo } from 'react';
 import { IRestaurant } from '../types';
 import { Image, StyleSheet, TouchableOpacity, View } from 'react-native';
-import { SCREEN_WIDTH, supabaseBucketImg } from '@/global';
+import { ContainerPadding, SCREEN_WIDTH, supabaseBucketImg } from '@/global';
 import { Flex, Gap, Text } from '@/components';
 import MaterialCommunityIcons from '@expo/vector-icons/MaterialCommunityIcons';
 import AntDesign from '@expo/vector-icons/AntDesign';
@@ -9,11 +9,16 @@ import { router } from 'expo-router';
 
 interface IProps {
   item: IRestaurant;
+  full?: boolean;
 }
 
 const imgWidth = SCREEN_WIDTH * 0.8;
+const fullImgWidth = SCREEN_WIDTH - ContainerPadding * 2;
 
-const RestaurantItem: FC<IProps> = ({ item }) => {
+const imgHeight = 150;
+const fullImgHeight = 200;
+
+const RestaurantItem: FC<IProps> = ({ item, full = false }) => {
   return (
     <TouchableOpacity
       onPress={() =>
@@ -22,7 +27,7 @@ const RestaurantItem: FC<IProps> = ({ item }) => {
           params: { id: item?.id },
         })
       }
-      style={{ width: imgWidth }}
+      style={{ width: full ? fullImgWidth - ContainerPadding : imgWidth }}
     >
       <Image
         source={{
@@ -31,8 +36,8 @@ const RestaurantItem: FC<IProps> = ({ item }) => {
             `restaurants/${item?.public_id}.${item?.preview}`,
         }}
         style={styles.img}
-        height={150}
-        width={imgWidth}
+        height={full ? fullImgHeight : imgHeight}
+        width={full ? fullImgWidth : imgWidth}
       />
       <Gap />
       <Flex justify='space-between'>
@@ -63,7 +68,7 @@ const RestaurantItem: FC<IProps> = ({ item }) => {
 
 const styles = StyleSheet.create({
   img: {
-    borderRadius: 12,
+    borderRadius: 24,
   },
   news: {
     fontSize: 10,

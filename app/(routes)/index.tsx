@@ -1,4 +1,4 @@
-import React, { FC, memo } from 'react';
+import React, { FC, memo, useMemo } from 'react';
 import { View } from 'react-native';
 
 import {
@@ -11,14 +11,14 @@ import {
   RestPromotions,
 } from '@/components';
 import { ActiveOrder, useOrder } from '@/widgets/order';
-import { useRestaurant } from '@/widgets/restaurants';
+import { SortedRestBlock, useRestaurant } from '@/widgets/restaurants';
 
 const HomeScreen: FC = () => {
   const { orderLoading } = useOrder();
   const { restaurants } = useRestaurant();
 
   return (
-    <Layout loading={orderLoading}>
+    <Layout scrollable loading={orderLoading}>
       <ConfirmAddress />
       <Header />
       <ActiveOrder />
@@ -62,6 +62,25 @@ const HomeScreen: FC = () => {
           />
         )}
       </Flex>
+      <Gap />
+      <SortedRestBlock small title='Популярные рестораны' />
+      <SortedRestBlock
+        title='Бургеры'
+        description='Найти тот самый бургер — задача не из простых. Но мы поможем: собрали рестораны, 
+        где их можно заказать. Осталось попробовать и выбрать лучший'
+        filterBy={(a) => a.tags.includes('Бургеры')}
+      />
+      <SortedRestBlock
+        title='С высоким рейтингом'
+        description='От бургеров и салатов до затейлевых десертов — что бы ни готовили в этих
+        ресторанах, результат всегда отличный. Встречайте подборку мест с самыми высокими оценками публики'
+      />
+      <SortedRestBlock
+        title='Доставка 0 Br'
+        filterBy={(item) => item.delivery_cost === 0}
+        description='В этих ресторанах можно сделать сделать заказ и не платить за доставку. Посмотрите, что есть рядом с вами'
+      />
+      <Gap />
     </Layout>
   );
 };

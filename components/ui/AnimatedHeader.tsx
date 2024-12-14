@@ -38,7 +38,7 @@ const AnimatedHeader: FC<IProps> = ({ title, scrollY, btn = null }) => {
   }));
 
   const animTextStyles = useAnimatedStyle(() => ({
-    fontSize: interpolate(scrollY.value, input, [36, 22], Extrapolation.CLAMP),
+    fontSize: interpolate(scrollY.value, input, [32, 22], Extrapolation.CLAMP),
     position: 'absolute',
     top: interpolate(
       scrollY.value,
