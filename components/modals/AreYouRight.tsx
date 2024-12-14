@@ -40,6 +40,7 @@ const AreYouRight: FC<IProps> = ({ bottomSheetRef, onConfirm, text }) => {
         <Flex justify='space-between'>
           <Button
             full
+            size={text ? 'medium' : 'small'}
             btnProps={{
               onPress: () => bottomSheetRef.current?.close(),
             }}
@@ -48,6 +49,7 @@ const AreYouRight: FC<IProps> = ({ bottomSheetRef, onConfirm, text }) => {
           </Button>
           <Button
             full
+            size={text ? 'medium' : 'small'}
             btnProps={{
               onPress: onPressConfirm,
             }}
@@ -56,7 +58,7 @@ const AreYouRight: FC<IProps> = ({ bottomSheetRef, onConfirm, text }) => {
             Да
           </Button>
         </Flex>
-        <Gap />
+        <Gap y={20} />
       </BottomSheetView>
     </BottomSheet>
   );
