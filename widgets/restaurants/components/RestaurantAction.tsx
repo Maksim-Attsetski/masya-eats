@@ -1,17 +1,23 @@
 import React, { FC, memo, PropsWithChildren, ReactNode } from 'react';
 
-import { StyleSheet, View } from 'react-native';
+import { StyleSheet, TouchableOpacity, View } from 'react-native';
 
 import { Flex, Text } from '@/components';
 
 interface IProps extends PropsWithChildren {
   title?: string;
   content: string[];
+  onPress: () => void;
 }
 
-const RestaurantAction: FC<IProps> = ({ title, children, content }) => {
+const RestaurantAction: FC<IProps> = ({
+  title,
+  children,
+  content,
+  onPress,
+}) => {
   return (
-    <View style={styles.container}>
+    <TouchableOpacity onPress={onPress} style={styles.container}>
       <View style={styles.textContainer}>
         <Text style={styles.title}>
           {children} {title}
@@ -19,7 +25,7 @@ const RestaurantAction: FC<IProps> = ({ title, children, content }) => {
         <Text style={styles.text}>{content[0]}</Text>
         {content[1] && <Text style={styles.subText}>{content[1]}</Text>}
       </View>
-    </View>
+    </TouchableOpacity>
   );
 };
 

@@ -1,4 +1,4 @@
-import React, { FC, memo, PropsWithChildren } from 'react';
+import React, { FC, memo, PropsWithChildren, ReactNode } from 'react';
 import Layout from './Layout';
 import AnimatedHeader from './AnimatedHeader';
 import { ScrollView } from 'react-native';
@@ -10,9 +10,17 @@ import Animated, {
 interface IProps extends PropsWithChildren {
   title: string;
   loading?: boolean;
+  right?: ReactNode;
+  onLeftPress?: () => void;
 }
 
-const LayoutWithAnimatedHeader: FC<IProps> = ({ children, title, loading }) => {
+const LayoutWithAnimatedHeader: FC<IProps> = ({
+  children,
+  title,
+  loading,
+  right,
+  onLeftPress,
+}) => {
   const scrollY = useSharedValue(0);
 
   const onScrollHandler = useAnimatedScrollHandler({
@@ -23,7 +31,12 @@ const LayoutWithAnimatedHeader: FC<IProps> = ({ children, title, loading }) => {
 
   return (
     <Layout loading={loading}>
-      <AnimatedHeader scrollY={scrollY} title={title} />
+      <AnimatedHeader
+        onLeftPress={onLeftPress}
+        btn={right}
+        scrollY={scrollY}
+        title={title}
+      />
       <Animated.ScrollView
         onScroll={onScrollHandler}
         scrollEventThrottle={16}

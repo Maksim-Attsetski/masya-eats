@@ -16,6 +16,7 @@ interface IProps {
   title: string;
   scrollY: SharedValue<number>;
   btn?: ReactNode;
+  onLeftPress?: () => void;
 }
 
 const HEADER_HEIGHT = 60;
@@ -24,7 +25,12 @@ const FULL_HEADER_HEIGHT = HEADER_HEIGHT + TEXT_PADDING;
 const BTN_SIZE = 40;
 const input = [0, 50];
 
-const AnimatedHeader: FC<IProps> = ({ title, scrollY, btn = null }) => {
+const AnimatedHeader: FC<IProps> = ({
+  title,
+  scrollY,
+  btn = null,
+  onLeftPress,
+}) => {
   const insets = useSafeAreaInsets();
   const styles = getStyles(insets.top);
 
@@ -61,7 +67,7 @@ const AnimatedHeader: FC<IProps> = ({ title, scrollY, btn = null }) => {
         <Animated.Text style={animTextStyles}>{title}</Animated.Text>
       </Animated.View>
       <View style={[styles.btn, styles.left]}>
-        <BackButton withoutBg />
+        <BackButton onPress={onLeftPress} withoutBg />
       </View>
       {btn && <View style={[styles.btn, styles.right]}>{btn}</View>}
     </>

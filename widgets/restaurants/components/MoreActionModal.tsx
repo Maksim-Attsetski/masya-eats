@@ -12,7 +12,7 @@ interface IProps {
   onPressSave?: () => void;
 }
 
-const RestaurantActionList: FC<IProps> = ({
+const MoreActionModal: FC<IProps> = ({
   item,
   onPressMore = () => {},
   onPressSave = () => {},
@@ -72,4 +72,4 @@ const RestaurantActionList: FC<IProps> = ({
   );
 };
 
-export default memo(RestaurantActionList);
+export default memo(MoreActionModal);

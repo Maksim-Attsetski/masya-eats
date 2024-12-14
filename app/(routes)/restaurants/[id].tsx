@@ -45,6 +45,7 @@ import {
 import { useBin } from '@/widgets/delivery';
 import { getRestOfferSections } from '@/hooks';
 import Empty from '@/components/ui/Empty';
+import BottomSheet, { BottomSheetView } from '@gorhom/bottom-sheet';
 
 const imgHeight = SCREEN_HEIGHT * 0.4;
 const HEADER_HEIGHT = 65;
@@ -57,6 +58,9 @@ const RestOffersList: FC = () => {
   const { restaurants } = useRestaurant();
   const { onGetRestOffers, restOffers, restOffersLoading } = useRestOffers();
   const { bin } = useBin();
+
+  const moreBottomSheet = useRef<BottomSheet>(null);
+  const saveBottomSheet = useRef<BottomSheet>(null);
 
   const flatListRef = useRef<FlatList>(null);
   const [imgVisible, setImgVisible] = useState<boolean>(true);
@@ -128,6 +132,20 @@ const RestOffersList: FC = () => {
     }
   };
 
+  const onPressSave = () => {
+    router.push({
+      pathname: '/(modals)/rest_save',
+      params: { item: JSON.stringify(item) },
+    });
+  };
+
+  const onPressMore = () => {
+    router.push({
+      pathname: '/(modals)/rest_more',
+      params: { item: JSON.stringify(item) },
+    });
+  };
+
   useEffect(() => {
     item?.id && onGetRestOffers(item?.id);
   }, [item?.id]);
@@ -185,7 +203,11 @@ const RestOffersList: FC = () => {
                   <Animated.Text style={[styles.name, secondNameStyles]}>
                     {item?.name}
                   </Animated.Text>
-                  <RestaurantActionList item={item} />
+                  <RestaurantActionList
+                    onPressMore={onPressMore}
+                    onPressSave={onPressSave}
+                    item={item}
+                  />
                   {imgVisible && restOfferSections.length > 0 && (
                     <Animated.View
                       key={'restOffersGenresList'}

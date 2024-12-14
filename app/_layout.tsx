@@ -23,6 +23,14 @@ export default function RootLayout() {
                   options={{ headerShown: false, animation: 'slide_from_left' }}
                 />
                 <Stack.Screen name='(auth)' options={{ headerShown: false }} />
+                <Stack.Screen
+                  name='(modals)'
+                  options={{
+                    animation: 'slide_from_bottom',
+                    headerShown: false,
+                    presentation: 'fullScreenModal',
+                  }}
+                />
                 <Stack.Screen name='+not-found' />
               </Stack>
             </GestureHandlerRootView>

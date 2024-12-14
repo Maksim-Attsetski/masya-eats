@@ -7,6 +7,7 @@ import { LoadingView } from '../ui';
 import { useOrder } from '@/widgets/order';
 import { useRestaurant } from '@/widgets/restaurants';
 import { useAsyncStorage } from '@/hooks';
+import { useCollection } from '@/widgets/collections';
 
 const AuthProvider: FC<PropsWithChildren> = ({ children }) => {
   const { setUser } = useAuth();
@@ -16,6 +17,7 @@ const AuthProvider: FC<PropsWithChildren> = ({ children }) => {
   const { onGetDelivery, deliveryLoading } = useDelivery();
   const { onGetOrders } = useOrder();
   const { onGetRestaurants } = useRestaurant();
+  const { onGetCollections } = useCollection();
 
   useEffect(() => {
     (async () => {
@@ -28,6 +30,7 @@ const AuthProvider: FC<PropsWithChildren> = ({ children }) => {
           setUser(user);
           if (user) {
             await onGetDelivery(user?.id);
+            await onGetCollections(user?.id);
             await onGetOrders(user?.id);
           }
         }
