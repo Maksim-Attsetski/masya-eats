@@ -8,10 +8,10 @@ import {
   Gap,
   Header,
   Layout,
+  RestPromotions,
 } from '@/components';
 import { ActiveOrder, useOrder } from '@/widgets/order';
 import { useRestaurant } from '@/widgets/restaurants';
-import { ContainerPadding } from '@/global';
 
 const HomeScreen: FC = () => {
   const { orderLoading } = useOrder();
@@ -23,6 +23,7 @@ const HomeScreen: FC = () => {
       <Header />
       <ActiveOrder />
       <Gap />
+      <RestPromotions />
       <Flex>
         <CategoryBlock
           route='restaurants'

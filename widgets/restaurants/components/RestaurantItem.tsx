@@ -51,9 +51,9 @@ const RestaurantItem: FC<IProps> = ({ item }) => {
 
       <Gap />
       <Flex>
-        {item?.news.map((news) => (
-          <Text style={styles.news} key={news}>
-            {news}
+        {item?.promotions.map((promo) => (
+          <Text style={styles.news} key={promo.title}>
+            {promo.title} - {promo.description}
           </Text>
         ))}
       </Flex>
